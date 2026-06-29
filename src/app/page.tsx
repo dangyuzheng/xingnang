@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   allCities,
@@ -58,9 +58,16 @@ export default function HomePage() {
   const [selectedDuration, setSelectedDuration] = useState<string[]>([]);
   const [selectedBudget, setSelectedBudget] = useState<string[]>([]);
   const [selectedSeason, setSelectedSeason] = useState<string[]>([]);
+  const [currentSeason, setCurrentSeason] = useState<string>("spring");
+  const [monthlyRecs, setMonthlyRecs] = useState<ReturnType<typeof getMonthlyRecommendations>>([]);
+  const [mounted, setMounted] = useState(false);
 
-  const currentSeason = getCurrentSeason();
-  const monthlyRecs = getMonthlyRecommendations(4);
+  useEffect(() => {
+    const season = getCurrentSeason();
+    setCurrentSeason(season);
+    setMonthlyRecs(getMonthlyRecommendations(season, 4));
+    setMounted(true);
+  }, []);
 
   const toggleFilter = (arr: string[], setArr: (v: string[]) => void, val: string) => {
     setArr(arr.includes(val) ? arr.filter((v) => v !== val) : [...arr, val]);
@@ -287,7 +294,7 @@ export default function HomePage() {
           <div className="flex items-center gap-2 mb-4">
             <TrendingUp className="w-4 h-4 text-[#C8956C]" />
             <h2 className="text-base font-bold text-[#4A6670]">本月最佳</h2>
-            <span className="text-xs text-[#4A6670]/40">{seasonLabels[currentSeason]}推荐</span>
+            <span className="text-xs text-[#4A6670]/40">{mounted ? seasonLabels[currentSeason] : ""}推荐</span>
           </div>
           <div className="grid grid-cols-2 gap-3">
             {monthlyRecs.map((city) => (

@@ -63,12 +63,10 @@ export function getCurrentSeason(): string {
   return "winter";
 }
 
-/** 获取当月推荐城市 */
-export function getMonthlyRecommendations(count: number = 4): CityGuide[] {
-  const season = getCurrentSeason();
+/** 获取当月推荐城市（稳定排序，避免 hydration 不一致） */
+export function getMonthlyRecommendations(season: string, count: number = 4): CityGuide[] {
   const suitable = allCities.filter((c) => c.seasons.includes(season as import("./types").SeasonTag));
-  const shuffled = [...suitable].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, count);
+  return suitable.slice(0, count);
 }
 
 /** 按偏好筛选城市 */
