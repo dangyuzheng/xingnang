@@ -3,7 +3,7 @@ import type { CityGuide } from "./types";
 export const moreCities: CityGuide[] = [
   {
     id: "suzhou", name: "苏州", province: "江苏", tagline: "姑苏城外寒山寺，夜半钟声到客船", gradient: "from-teal-300 via-emerald-200 to-pink-100",
-    isNiche: false, destTypes: ["ancient_city", "city_walk"], durationRange: "3-4d", budgetRange: "comfort", seasons: ["spring", "autumn"],
+    isNiche: false, destTypes: ["ancient_city"], durationRange: "4-7d", budgetRange: "comfort", seasons: ["spring", "autumn"],
     bestTime: "3-5月 / 9-11月", duration: "3-4天", budget: "人均1500-2500元", transportHub: "苏南硕放机场/苏州站",
     coreTip: "拙政园7:30开门第一批进去体验好10倍",
     funSpots: [
@@ -54,7 +54,7 @@ export const moreCities: CityGuide[] = [
   },
   {
     id: "dali", name: "大理", province: "云南", tagline: "风花雪月，苍山洱海", gradient: "from-indigo-300 via-blue-200 to-green-200",
-    isNiche: false, destTypes: ["ancient_city", "nature", "ethnic"], durationRange: "5-7d", budgetRange: "comfort", seasons: ["spring", "autumn"],
+    isNiche: false, destTypes: ["ancient_city", "nature", "ethnic"], durationRange: "4-7d", budgetRange: "comfort", seasons: ["spring", "autumn"],
     bestTime: "3-5月 / 9-11月", duration: "4-5天", budget: "人均1500-3000元", transportHub: "大理机场/大理站",
     coreTip: "环洱海别骑电动车全程，风大日晒太累，自驾更好",
     funSpots: [
@@ -101,7 +101,7 @@ export const moreCities: CityGuide[] = [
   },
   {
     id: "changsha", name: "长沙", province: "湖南", tagline: "星城不夜，辣味人间", gradient: "from-orange-400 via-amber-300 to-yellow-200",
-    isNiche: false, destTypes: ["food_city", "city_walk"], durationRange: "3-4d", budgetRange: "comfort", seasons: ["spring", "autumn"],
+    isNiche: false, destTypes: ["food_city"], durationRange: "4-7d", budgetRange: "comfort", seasons: ["spring", "autumn"],
     bestTime: "3-5月 / 9-11月", duration: "3-4天", budget: "人均1000-2000元", transportHub: "黄花机场/长沙南站",
     coreTip: "茶颜悦色无处不在，别在一家排队，下个路口还有",
     funSpots: [
@@ -149,7 +149,7 @@ export const moreCities: CityGuide[] = [
   },
   {
     id: "dunhuang", name: "敦煌", province: "甘肃", tagline: "大漠孤烟，千年丝路", gradient: "from-amber-400 via-orange-200 to-red-200",
-    isNiche: false, destTypes: ["ancient_city", "nature", "hiking"], durationRange: "3-4d", budgetRange: "luxury", seasons: ["summer"],
+    isNiche: false, destTypes: ["ancient_city", "nature", "hiking"], durationRange: "4-7d", budgetRange: "luxury", seasons: ["summer"],
     bestTime: "5-10月", duration: "3-4天", budget: "人均2500-4000元", transportHub: "敦煌机场/敦煌站",
     coreTip: "莫高窟门票必须提前1个月预约，A类票每天只有6000张",
     funSpots: [
@@ -193,7 +193,7 @@ export const moreCities: CityGuide[] = [
   },
   {
     id: "beijing", name: "北京", province: "北京", tagline: "一座北京城，半部中国史", gradient: "from-red-400 via-amber-200 to-yellow-100",
-    isNiche: false, destTypes: ["ancient_city", "food_city", "city_walk"], durationRange: "5-7d", budgetRange: "luxury", seasons: ["spring", "autumn"],
+    isNiche: false, destTypes: ["ancient_city", "food_city"], durationRange: "4-7d", budgetRange: "luxury", seasons: ["spring", "autumn"],
     bestTime: "4-5月 / 9-10月", duration: "5-7天", budget: "人均2500-4000元", transportHub: "首都机场/大兴机场/北京南站",
     coreTip: "故宫门票必须提前网上预约，当天几乎买不到",
     funSpots: [
@@ -247,7 +247,7 @@ export const moreCities: CityGuide[] = [
   },
   {
     id: "guilin", name: "桂林", province: "广西", tagline: "桂林山水甲天下", gradient: "from-green-300 via-emerald-200 to-sky-200",
-    isNiche: false, destTypes: ["nature", "ancient_city"], durationRange: "5-7d", budgetRange: "comfort", seasons: ["spring", "summer", "autumn"],
+    isNiche: false, destTypes: ["nature", "ancient_city"], durationRange: "4-7d", budgetRange: "comfort", seasons: ["spring", "summer", "autumn"],
     bestTime: "4-10月", duration: "4-5天", budget: "人均1500-2500元", transportHub: "两江机场/桂林站",
     coreTip: "漓江竹筏选杨堤-兴坪段，是20元人民币取景地",
     funSpots: [
@@ -293,7 +293,7 @@ export const moreCities: CityGuide[] = [
   },
   {
     id: "harbin", name: "哈尔滨", province: "黑龙江", tagline: "冰城夏都，东方莫斯科", gradient: "from-blue-400 via-indigo-200 to-slate-200",
-    isNiche: false, destTypes: ["ancient_city", "city_walk"], durationRange: "3-4d", budgetRange: "comfort", seasons: ["winter"],
+    isNiche: false, destTypes: ["ancient_city"], durationRange: "4-7d", budgetRange: "comfort", seasons: ["winter"],
     bestTime: "12-2月(冰雪)/6-8月(避暑)", duration: "4-5天", budget: "人均1500-3000元", transportHub: "太平机场/哈尔滨站",
     coreTip: "室外手机会冻关机，贴暖宝宝在手机背面",
     funSpots: [

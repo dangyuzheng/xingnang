@@ -4,13 +4,12 @@ export type DestinationType =
   | "island"
   | "ancient_city"
   | "food_city"
-  | "flower"
   | "ethnic"
   | "nature"
-  | "city_walk"
-  | "hiking";
+  | "hiking"
+  | "hot_spring";
 
-export type DurationRange = "1-2d" | "3-4d" | "5-7d" | "7d+";
+export type DurationRange = "1-3d" | "4-7d" | "8d+";
 export type BudgetRange = "budget" | "comfort" | "luxury" | "premium";
 export type SeasonTag = "spring" | "summer" | "autumn" | "winter" | "all_season";
 
@@ -18,26 +17,24 @@ export const DEST_TYPE_LABELS: Record<DestinationType, string> = {
   mountain: "雪山",
   island: "海岛",
   ancient_city: "古城",
-  food_city: "美食",
-  flower: "花海",
-  ethnic: "民族",
-  nature: "自然风光",
-  city_walk: "城市逛吃",
+  food_city: "城市美食",
+  ethnic: "民族风情",
+  nature: "草原湖泊",
   hiking: "户外徒步",
+  hot_spring: "温泉度假",
 };
 
 export const DURATION_LABELS: Record<DurationRange, string> = {
-  "1-2d": "1-2天短途",
-  "3-4d": "3-4天",
-  "5-7d": "5-7天",
-  "7d+": "7天以上",
+  "1-3d": "1-3天",
+  "4-7d": "4-7天",
+  "8d+": "8天以上",
 };
 
 export const BUDGET_LABELS: Record<BudgetRange, string> = {
   budget: "穷游 (<1k)",
   comfort: "舒适 (1-3k)",
-  luxury: "轻奢 (3-5k)",
-  premium: "高端 (5k+)",
+  luxury: "轻奢 (3-6k)",
+  premium: "高端 (6k+)",
 };
 
 export const SEASON_LABELS: Record<SeasonTag, string> = {

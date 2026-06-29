@@ -70,7 +70,6 @@ export default function CityDetailPage({ params }: { params: Promise<{ id: strin
   const [showBudget, setShowBudget] = useState(false);
   const [showShare, setShowShare] = useState(false);
   const [showAddToList, setShowAddToList] = useState(false);
-  const [showFootprint, setShowFootprint] = useState(false);
   const [budgetPeople, setBudgetPeople] = useState(2);
   const [budgetHotelLevel, setBudgetHotelLevel] = useState<"budget" | "comfort" | "luxury">("comfort");
 
@@ -203,7 +202,6 @@ export default function CityDetailPage({ params }: { params: Promise<{ id: strin
             } else {
               setFootprint(city.id, "want_to_go");
             }
-            setShowFootprint(false);
           }}
           className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-medium transition-all ${
             footprint?.status === "want_to_go"
@@ -218,7 +216,7 @@ export default function CityDetailPage({ params }: { params: Promise<{ id: strin
             if (footprint?.status === "been_there") {
               setFootprint(city.id, "none");
             } else {
-              setShowFootprint(true);
+              setFootprint(city.id, "been_there");
             }
           }}
           className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-medium transition-all ${

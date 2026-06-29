@@ -2,14 +2,16 @@
 
 import { useRouter } from "next/navigation";
 import { nicheCitiesList } from "@/lib/data-index";
-import { ArrowLeft, Star, Mountain, TreePine, Flower2, Users, Footprints } from "lucide-react";
+import { ArrowLeft, Star, Mountain, TreePine, Users, Footprints, Castle, Utensils, Palmtree } from "lucide-react";
 
 const nicheIcons: Record<string, React.ReactNode> = {
   mountain: <Mountain className="w-4 h-4" />,
   nature: <TreePine className="w-4 h-4" />,
-  flower: <Flower2 className="w-4 h-4" />,
   ethnic: <Users className="w-4 h-4" />,
   hiking: <Footprints className="w-4 h-4" />,
+  ancient_city: <Castle className="w-4 h-4" />,
+  food_city: <Utensils className="w-4 h-4" />,
+  island: <Palmtree className="w-4 h-4" />,
 };
 
 export default function NichePage() {
@@ -59,7 +61,7 @@ export default function NichePage() {
                 <div className="flex flex-wrap gap-1 mt-1.5">
                   {city.destTypes.slice(0, 3).map((t) => (
                     <span key={t} className="flex items-center gap-0.5 text-[10px] px-1.5 py-0.5 rounded bg-[#F5EDE4] text-[#C8956C]">
-                      {nicheIcons[t]} {t === "mountain" ? "雪山" : t === "nature" ? "自然" : t === "flower" ? "花海" : t === "ethnic" ? "民族" : "徒步"}
+                      {nicheIcons[t]} {t === "mountain" ? "雪山" : t === "nature" ? "草原湖泊" : t === "ethnic" ? "民族风情" : t === "hiking" ? "徒步" : t === "ancient_city" ? "古城" : t === "island" ? "海岛" : t === "food_city" ? "城市美食" : t === "hot_spring" ? "温泉" : ""}
                     </span>
                   ))}
                 </div>

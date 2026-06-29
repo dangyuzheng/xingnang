@@ -10,8 +10,8 @@ import {
   destTypeLabels,
   durationLabels,
   budgetLabels,
-  seasonLabels,
   getCurrentSeason,
+  seasonLabels,
 } from "@/lib/data-index";
 import { useFavorites } from "@/hooks/use-favorites";
 import {
@@ -25,14 +25,12 @@ import {
   Flower2,
   Users,
   TreePine,
-  Building2,
   Footprints,
   ChevronDown,
   ChevronUp,
   Map,
   Star,
   Heart,
-  Luggage,
   TrendingUp,
   Shield,
 } from "lucide-react";
@@ -42,11 +40,10 @@ const destTypeIcons: Record<string, React.ReactNode> = {
   island: <Palmtree className="w-4 h-4" />,
   ancient_city: <Castle className="w-4 h-4" />,
   food_city: <Utensils className="w-4 h-4" />,
-  flower: <Flower2 className="w-4 h-4" />,
   ethnic: <Users className="w-4 h-4" />,
   nature: <TreePine className="w-4 h-4" />,
-  city_walk: <Building2 className="w-4 h-4" />,
   hiking: <Footprints className="w-4 h-4" />,
+  hot_spring: <Flower2 className="w-4 h-4" />,
 };
 
 export default function HomePage() {
@@ -57,7 +54,6 @@ export default function HomePage() {
   const [selectedDestTypes, setSelectedDestTypes] = useState<string[]>([]);
   const [selectedDuration, setSelectedDuration] = useState<string[]>([]);
   const [selectedBudget, setSelectedBudget] = useState<string[]>([]);
-  const [selectedSeason, setSelectedSeason] = useState<string[]>([]);
   const [currentSeason, setCurrentSeason] = useState<string>("spring");
   const [monthlyRecs, setMonthlyRecs] = useState<ReturnType<typeof getMonthlyRecommendations>>([]);
   const [mounted, setMounted] = useState(false);
@@ -73,7 +69,7 @@ export default function HomePage() {
     setArr(arr.includes(val) ? arr.filter((v) => v !== val) : [...arr, val]);
   };
 
-  const hasFilters = selectedDestTypes.length > 0 || selectedDuration.length > 0 || selectedBudget.length > 0 || selectedSeason.length > 0;
+  const hasFilters = selectedDestTypes.length > 0 || selectedDuration.length > 0 || selectedBudget.length > 0;
 
   const handleExplore = useCallback(() => {
     setIsSpinning(true);
@@ -81,7 +77,6 @@ export default function HomePage() {
       destTypes: selectedDestTypes.length > 0 ? selectedDestTypes : undefined,
       durationRange: selectedDuration.length > 0 ? selectedDuration : undefined,
       budgetRange: selectedBudget.length > 0 ? selectedBudget : undefined,
-      seasons: selectedSeason.length > 0 ? selectedSeason : undefined,
       excludeVisited: visitedCityIds,
     });
     const pool = filtered.length > 0 ? filtered : allCities;
@@ -93,7 +88,7 @@ export default function HomePage() {
       setIsSpinning(false);
       router.push(`/city/${random.id}`);
     }, 1200);
-  }, [selectedDestTypes, selectedDuration, selectedBudget, selectedSeason, visitedCityIds, router]);
+  }, [selectedDestTypes, selectedDuration, selectedBudget, visitedCityIds, router]);
 
   const totalFavorites = lists.reduce((sum, l) => sum + l.cityIds.length, 0);
 
@@ -102,11 +97,16 @@ export default function HomePage() {
       {/* 顶部导航 */}
       <nav className="sticky top-0 z-50 bg-[#FAF7F2]/90 backdrop-blur-md border-b border-[#C8956C]/10">
         <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#C8956C] to-[#A67B5B] flex items-center justify-center">
-              <Luggage className="w-4 h-4 text-white" />
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#C8956C] to-[#A67B5B] flex items-center justify-center shadow-sm">
+              <svg width="18" height="18" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M32 14 L48 42 L16 42 Z" stroke="white" strokeWidth="4" strokeLinejoin="round" fill="none"/>
+                <path d="M32 22 L32 36" stroke="white" strokeWidth="3" strokeLinecap="round"/>
+                <circle cx="32" cy="18" r="3" fill="white"/>
+                <path d="M12 50 Q22 46 32 50 Q42 54 52 50" stroke="white" strokeWidth="3" strokeLinecap="round" opacity="0.6" fill="none"/>
+              </svg>
             </div>
-            <span className="font-bold text-[#4A6670] text-lg">行囊</span>
+            <span className="font-bold text-[#4A6670] text-lg tracking-wide">行囊</span>
           </div>
           <div className="flex items-center gap-3">
             <button
@@ -128,11 +128,16 @@ export default function HomePage() {
         {/* 核心视觉区 */}
         <div className="pt-12 pb-8 text-center">
           <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-[#C8956C] to-[#A67B5B] flex items-center justify-center shadow-lg shadow-[#C8956C]/20">
-            <Compass className={`w-10 h-10 text-white ${isSpinning ? "animate-spin" : ""}`} />
+            <svg width="40" height="40" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M32 14 L48 42 L16 42 Z" stroke="white" strokeWidth="3.5" strokeLinejoin="round" fill="none"/>
+              <path d="M32 22 L32 36" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+              <circle cx="32" cy="18" r="2.5" fill="white"/>
+              <path d="M12 50 Q22 46 32 50 Q42 54 52 50" stroke="white" strokeWidth="2.5" strokeLinecap="round" opacity="0.6" fill="none"/>
+            </svg>
           </div>
-          <h1 className="text-3xl font-bold text-[#4A6670] mb-2">下一站去哪？</h1>
+          <h1 className="text-3xl font-bold text-[#4A6670] mb-2">赴一场人间山海</h1>
           <p className="text-[#4A6670]/60 text-base">
-            {hasFilters ? "按偏好精准推荐" : "选好偏好，一键解锁你的专属目的地"}
+            挑选心之所向，邂逅独属于你的风景
           </p>
         </div>
 
@@ -145,7 +150,7 @@ export default function HomePage() {
             <div className="flex items-center gap-2 text-[#4A6670]">
               <Sparkles className="w-4 h-4 text-[#C8956C]" />
               <span className="text-sm font-medium">
-                {hasFilters ? `已选 ${selectedDestTypes.length + selectedDuration.length + selectedBudget.length + selectedSeason.length} 个偏好` : "偏好筛选（可选）"}
+                {hasFilters ? `已选 ${selectedDestTypes.length + selectedDuration.length + selectedBudget.length} 个偏好` : "偏好筛选（可选）"}
               </span>
             </div>
             {showFilters ? <ChevronUp className="w-4 h-4 text-[#4A6670]/40" /> : <ChevronDown className="w-4 h-4 text-[#4A6670]/40" />}
@@ -214,45 +219,12 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* 出行季节 */}
-              <div>
-                <h3 className="text-xs font-semibold text-[#4A6670]/50 uppercase tracking-wider mb-2">出行季节</h3>
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    onClick={() => setSelectedSeason(selectedSeason.includes(currentSeason) ? selectedSeason.filter((s) => s !== currentSeason) : [currentSeason])}
-                    className={`px-3 py-1.5 rounded-full text-xs transition-all ${
-                      selectedSeason.includes(currentSeason)
-                        ? "bg-[#C8956C] text-white shadow-sm"
-                        : "bg-[#F5EDE4] text-[#4A6670] hover:bg-[#C8956C]/10"
-                    }`}
-                  >
-                    当前{seasonLabels[currentSeason]}推荐
-                  </button>
-                  {Object.entries(seasonLabels)
-                    .filter(([key]) => key !== currentSeason)
-                    .map(([key, label]) => (
-                      <button
-                        key={key}
-                        onClick={() => toggleFilter(selectedSeason, setSelectedSeason, key)}
-                        className={`px-3 py-1.5 rounded-full text-xs transition-all ${
-                          selectedSeason.includes(key)
-                            ? "bg-[#C8956C] text-white shadow-sm"
-                            : "bg-[#F5EDE4] text-[#4A6670] hover:bg-[#C8956C]/10"
-                        }`}
-                      >
-                        {label}
-                      </button>
-                    ))}
-                </div>
-              </div>
-
               {hasFilters && (
                 <button
                   onClick={() => {
                     setSelectedDestTypes([]);
                     setSelectedDuration([]);
                     setSelectedBudget([]);
-                    setSelectedSeason([]);
                   }}
                   className="text-xs text-[#C8956C] hover:underline"
                 >
@@ -296,20 +268,21 @@ export default function HomePage() {
             <h2 className="text-base font-bold text-[#4A6670]">本月最佳</h2>
             <span className="text-xs text-[#4A6670]/40">{mounted ? seasonLabels[currentSeason] : ""}推荐</span>
           </div>
-          <div className="grid grid-cols-2 gap-3">
-            {monthlyRecs.map((city) => (
+          <div className="grid grid-cols-3 gap-3">
+            {monthlyRecs.slice(0, 3).map((city) => (
               <button
                 key={city.id}
                 onClick={() => router.push(`/city/${city.id}`)}
-                className="bg-white rounded-xl border border-[#C8956C]/10 p-4 text-left hover:shadow-md transition-shadow group"
+                className="group relative bg-white rounded-2xl border border-[#C8956C]/10 overflow-hidden hover:shadow-lg hover:shadow-[#C8956C]/10 transition-all text-left"
               >
-                <div className={`w-full h-20 rounded-lg bg-gradient-to-br ${city.gradient} mb-3 flex items-end p-2`}>
-                  <span className="text-white font-bold text-sm drop-shadow">{city.name}</span>
+                <div className={`w-full aspect-[4/3] bg-gradient-to-br ${city.gradient} flex items-end p-2.5`}>
+                  <span className="text-white font-bold text-sm drop-shadow-md">{city.name}</span>
                 </div>
-                <p className="text-xs text-[#4A6670]/60 line-clamp-2">{city.tagline}</p>
-                <div className="flex items-center gap-1 mt-1.5">
-                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#F5EDE4] text-[#C8956C]">{city.duration}</span>
-                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#F5EDE4] text-[#C8956C]">{city.budget.split("人均")[1] || city.budget}</span>
+                <div className="p-2.5">
+                  <p className="text-[11px] text-[#4A6670]/60 line-clamp-2 leading-relaxed mb-1.5">{city.tagline}</p>
+                  <div className="flex items-center gap-1">
+                    <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-[#F5EDE4] text-[#C8956C]">{city.duration}</span>
+                  </div>
                 </div>
               </button>
             ))}

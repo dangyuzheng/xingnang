@@ -22,28 +22,26 @@ export const destTypeLabels: Record<string, string> = {
   mountain: "雪山",
   island: "海岛",
   ancient_city: "古城",
-  food_city: "美食",
-  flower: "花海",
-  ethnic: "民族",
-  nature: "自然风光",
-  city_walk: "城市逛吃",
+  ethnic: "民族风情",
+  food_city: "城市美食",
   hiking: "户外徒步",
+  nature: "草原湖泊",
+  hot_spring: "温泉度假",
 };
 
 /** 出行天数标签映射 */
 export const durationLabels: Record<string, string> = {
-  "1-2d": "1-2天短途",
-  "3-4d": "3-4天",
-  "5-7d": "5-7天",
-  "7d+": "7天以上",
+  "1-3d": "1-3天",
+  "4-7d": "4-7天",
+  "8d+": "8天以上",
 };
 
 /** 预算档位标签映射 */
 export const budgetLabels: Record<string, string> = {
   budget: "穷游(<1k)",
   comfort: "舒适(1-3k)",
-  luxury: "轻奢(3-5k)",
-  premium: "高端(5k+)",
+  luxury: "轻奢(3-6k)",
+  premium: "高端(6k+)",
 };
 
 /** 季节标签映射 */
@@ -64,7 +62,7 @@ export function getCurrentSeason(): string {
 }
 
 /** 获取当月推荐城市（稳定排序，避免 hydration 不一致） */
-export function getMonthlyRecommendations(season: string, count: number = 4): CityGuide[] {
+export function getMonthlyRecommendations(season: string, count: number = 3): CityGuide[] {
   const suitable = allCities.filter((c) => c.seasons.includes(season as import("./types").SeasonTag));
   return suitable.slice(0, count);
 }
