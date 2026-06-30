@@ -207,3 +207,8 @@ body {
   background: #C8956C30;
   color: #4A6670;
 }
+
+
+#coze-coding-badge {
+  display: none!important;
+}

@@ -263,7 +263,7 @@ export default function HomePage() {
               <button
                 key={city.id}
                 onClick={() => router.push(`/city/${city.id}`)}
-                className="group relative bg-white rounded-2xl border border-[#C8956C]/10 overflow-hidden hover:shadow-lg hover:shadow-[#C8956C]/10 transition-all text-left"
+                className="flex flex-col group relative bg-white rounded-2xl border border-[#C8956C]/10 overflow-hidden hover:shadow-lg hover:shadow-[#C8956C]/10 transition-all text-left"
               >
                 <div className={`w-full aspect-[4/1] bg-gradient-to-br ${city.gradient} flex items-end p-2.5`}>
                   <span className="text-white font-bold text-sm drop-shadow-md">{city.name}</span>
