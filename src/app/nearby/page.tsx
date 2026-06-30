@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { allCities, getNearbyCities } from "@/lib/data-index";
 import { ArrowLeft, MapPin, Train, Car, Clock } from "lucide-react";
 
-const originCities = ["北京", "上海", "成都", "重庆", "广州", "杭州", "西安", "武汉"];
+const originCities = ["北京", "上海", "广州", "深圳", "成都", "重庆", "杭州", "西安"];
 
 export default function NearbyPage() {
   const router = useRouter();
