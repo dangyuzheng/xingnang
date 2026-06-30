@@ -1,13 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#C8956C"/>
-      <stop offset="100%" stop-color="#A67B5B"/>
-    </linearGradient>
-  </defs>
-  <rect width="64" height="64" rx="14" fill="url(#g)"/>
-  <path d="M32 14 L48 42 L16 42 Z" fill="none" stroke="white" stroke-width="2.5" stroke-linejoin="round"/>
-  <path d="M32 22 L32 36" stroke="white" stroke-width="2" stroke-linecap="round"/>
-  <circle cx="32" cy="18" r="2" fill="white"/>
-  <path d="M12 48 Q22 44 32 48 Q42 52 52 48" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
-</svg>
+<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1782782446134" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="22655" width="128" height="128" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M512 56.888889a455.111111 455.111111 0 1 1 0 910.222222A455.111111 455.111111 0 0 1 512 56.888889z m227.555556 227.555555L405.105778 405.105778 284.444444 739.555556l334.449778-120.661334L739.555556 284.444444z" fill="#b98e69" p-id="22656"></path><path d="M512 512m-56.888889 0a56.888889 56.888889 0 1 0 113.777778 0 56.888889 56.888889 0 1 0-113.777778 0Z" fill="#b98e69" p-id="22657"></path></svg>
