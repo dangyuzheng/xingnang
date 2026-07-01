@@ -43,7 +43,7 @@ const destTypeIcons: Record<string, React.ReactNode> = {
   hot_spring: <Flower2 className="w-4 h-4" />,
 };
 
-type BlindboxPhase = "idle" | "shaking" | "opening" | "revealing";
+type BlindboxPhase = "idle" | "shaking" ;
 
 export default function HomePage() {
   const router = useRouter();
@@ -88,15 +88,10 @@ export default function HomePage() {
     setBlindboxPhase("shaking");
     
     setTimeout(() => {
-      setBlindboxPhase("opening");
-      setTimeout(() => {
-        setBlindboxPhase("revealing");
         setRevealedCity({ id: random.id, name: random.name, gradient: random.gradient });
-        setTimeout(() => {
-          router.push(`/city/${random.id}`);
-        }, 1200);
-      }, 400);
-    }, 800);
+        router.push(`/city/${random.id}`);
+    }, 450);
+    
   }, [selectedDestTypes, selectedDuration, selectedBudget, visitedCityIds, router]);
 
   const totalFavorites = lists.reduce((sum, l) => sum + l.cityIds.length, 0);
@@ -205,9 +200,9 @@ export default function HomePage() {
       <main className="flex flex-col items-center justify-center min-h-[calc(100vh-3.5rem)] px-4">
         <div className="w-full max-w-md text-center">
           {/* 标题区 */}
-          <h1 className="text-2xl font-bold text-[#4A6670] mb-2">赴一场人间山海</h1>
+          <h1 className="text-2xl font-bold text-[#4A6670] mb-2">把下一站，交给惊喜</h1>
           <p className="text-sm text-[#4A6670]/50 mb-10">
-            挑选心之所向，邂逅独属于你的风景
+            一键开启旅行盲盒，解锁专属目的地与完整攻略
           </p>
 
           {/* 盲盒按钮区 */}
@@ -243,31 +238,6 @@ export default function HomePage() {
             </div>
           )}
 
-          {blindboxPhase === "opening" && (
-            <div className="w-full py-5 bg-gradient-to-r from-[#C8956C] to-[#A67B5B] text-white rounded-2xl font-bold text-lg shadow-[0_20px_40px_-10px_rgba(200,149,108,0.5)] animate-blindbox-open">
-              <span className="flex items-center justify-center gap-2">
-                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v3" />
-                  <path d="M3 8h18v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8z" />
-                  <path d="M12 8v13" />
-                  <path d="M8 12h8" />
-                </svg>
-                惊喜揭晓！
-              </span>
-            </div>
-          )}
-
-          {blindboxPhase === "revealing" && revealedCity && (
-            <div className="animate-blindbox-reveal">
-              <div className={`w-full py-5 bg-gradient-to-r ${revealedCity.gradient} text-white rounded-2xl font-bold text-lg shadow-[0_20px_40px_-10px_rgba(200,149,108,0.5)]`}>
-                <span className="flex items-center justify-center gap-2">
-                  <MapPin className="w-5 h-5" />
-                  {revealedCity.name}
-                </span>
-              </div>
-              <p className="text-xs text-[#4A6670]/40 mt-3">正在前往攻略页...</p>
-            </div>
-          )}
 
           {/* 偏好筛选 - 按钮下方小字 */}
           <button
