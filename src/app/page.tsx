@@ -16,8 +16,6 @@ import {
 import { useFavorites } from "@/hooks/use-favorites";
 import {
   MapPin,
-  Compass,
-  Sparkles,
   Mountain,
   Palmtree,
   Castle,
@@ -26,13 +24,12 @@ import {
   Users,
   TreePine,
   Footprints,
-  ChevronDown,
-  ChevronUp,
-  Map,
   Star,
   Heart,
   TrendingUp,
   Shield,
+  Menu,
+  X,
 } from "lucide-react";
 
 const destTypeIcons: Record<string, React.ReactNode> = {
@@ -46,19 +43,21 @@ const destTypeIcons: Record<string, React.ReactNode> = {
   hot_spring: <Flower2 className="w-4 h-4" />,
 };
 
+type BlindboxPhase = "idle" | "shaking" | "opening" | "revealing";
+
 export default function HomePage() {
   const router = useRouter();
   const { visitedCityIds, lists } = useFavorites();
-  const [isSpinning, setIsSpinning] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
-  const [showMonthly, setShowMonthly] = useState(false);
-  const [showShortcuts, setShowShortcuts] = useState(false);
   const [selectedDestTypes, setSelectedDestTypes] = useState<string[]>([]);
   const [selectedDuration, setSelectedDuration] = useState<string[]>([]);
   const [selectedBudget, setSelectedBudget] = useState<string[]>([]);
   const [currentSeason, setCurrentSeason] = useState<string>("spring");
   const [monthlyRecs, setMonthlyRecs] = useState<ReturnType<typeof getMonthlyRecommendations>>([]);
   const [mounted, setMounted] = useState(false);
+  const [blindboxPhase, setBlindboxPhase] = useState<BlindboxPhase>("idle");
+  const [revealedCity, setRevealedCity] = useState<{ id: string; name: string; gradient: string } | null>(null);
 
   useEffect(() => {
     const season = getCurrentSeason();
@@ -74,7 +73,6 @@ export default function HomePage() {
   const hasFilters = selectedDestTypes.length > 0 || selectedDuration.length > 0 || selectedBudget.length > 0;
 
   const handleExplore = useCallback(() => {
-    setIsSpinning(true);
     const filtered = filterCities({
       destTypes: selectedDestTypes.length > 0 ? selectedDestTypes : undefined,
       durationRange: selectedDuration.length > 0 ? selectedDuration : undefined,
@@ -86,18 +84,27 @@ export default function HomePage() {
     const finalPool = available.length > 0 ? available : pool;
     const random = finalPool[Math.floor(Math.random() * finalPool.length)];
 
+    // Start blind box animation
+    setBlindboxPhase("shaking");
+    
     setTimeout(() => {
-      setIsSpinning(false);
-      router.push(`/city/${random.id}`);
-    }, 1200);
+      setBlindboxPhase("opening");
+      setTimeout(() => {
+        setBlindboxPhase("revealing");
+        setRevealedCity({ id: random.id, name: random.name, gradient: random.gradient });
+        setTimeout(() => {
+          router.push(`/city/${random.id}`);
+        }, 1200);
+      }, 400);
+    }, 800);
   }, [selectedDestTypes, selectedDuration, selectedBudget, visitedCityIds, router]);
 
   const totalFavorites = lists.reduce((sum, l) => sum + l.cityIds.length, 0);
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen bg-[#FAF7F2] relative">
       {/* 顶部导航 */}
-      <nav className="sticky top-0 z-50 bg-[#FAF7F2]/90 backdrop-blur-md border-b border-[#C8956C]/10">
+      <nav className="sticky top-0 z-50 bg-[#FAF7F2]/90 backdrop-blur-md">
         <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#C8956C] to-[#A67B5B] flex items-center justify-center shadow-sm">
@@ -105,76 +112,177 @@ export default function HomePage() {
             </div>
             <span className="font-bold text-[#4A6670] text-lg tracking-wide">行囊</span>
           </div>
-          <div className="flex items-center gap-3">
+          <button
+            onClick={() => setShowMenu(!showMenu)}
+            className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-[#C8956C]/10 transition-colors"
+          >
+            {showMenu ? <X className="w-5 h-5 text-[#4A6670]/60" /> : <Menu className="w-5 h-5 text-[#4A6670]/60" />}
+          </button>
+        </div>
+      </nav>
+
+      {/* 菜单下拉面板 */}
+      {showMenu && (
+        <div className="fixed inset-x-0 top-14 z-40 bg-white/95 backdrop-blur-md border-b border-[#C8956C]/10 shadow-lg animate-fade-in">
+          <div className="max-w-2xl mx-auto px-4 py-4 space-y-4">
+            {/* 收藏 */}
             <button
-              onClick={() => router.push("/favorites")}
-              className="flex items-center gap-1.5 text-sm text-[#4A6670]/70 hover:text-[#C8956C] transition-colors"
+              onClick={() => { setShowMenu(false); router.push("/favorites"); }}
+              className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-[#F5EDE4] transition-colors text-left"
             >
-              <Heart className="w-4 h-4" />
+              <Heart className="w-5 h-5 text-[#C8956C]" />
+              <span className="text-sm text-[#4A6670]">我的收藏</span>
               {totalFavorites > 0 && (
-                <span className="bg-[#E8655A] text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                <span className="ml-auto bg-[#E8655A] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                   {totalFavorites}
                 </span>
               )}
             </button>
+
+            {/* 本月最佳 */}
+            <div className="border-t border-[#C8956C]/10 pt-3">
+              <div className="flex items-center gap-2 mb-2 px-3">
+                <TrendingUp className="w-4 h-4 text-[#C8956C]" />
+                <span className="text-sm text-[#4A6670]">本月最佳</span>
+                <span className="text-xs text-[#4A6670]/40">{mounted ? seasonLabels[currentSeason] : ""}</span>
+              </div>
+              <div className="grid grid-cols-3 gap-2 px-3">
+                {monthlyRecs.slice(0, 3).map((city) => (
+                  <button
+                    key={city.id}
+                    onClick={() => { setShowMenu(false); router.push(`/city/${city.id}`); }}
+                    className="flex flex-col rounded-xl overflow-hidden hover:shadow-md transition-shadow text-left"
+                  >
+                    <div className={`w-full aspect-[4/1] bg-gradient-to-br ${city.gradient} flex items-end p-2`}>
+                      <span className="text-white font-bold text-xs drop-shadow-md">{city.name}</span>
+                    </div>
+                    <div className="p-2 bg-[#F5EDE4]">
+                      <p className="text-[10px] text-[#4A6670]/60 line-clamp-1">{city.duration}</p>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* 快捷入口 */}
+            <div className="border-t border-[#C8956C]/10 pt-3 space-y-1">
+              <button
+                onClick={() => { setShowMenu(false); router.push("/nearby"); }}
+                className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-[#F5EDE4] transition-colors text-left"
+              >
+                <MapPin className="w-5 h-5 text-green-500" />
+                <div className="flex-1">
+                  <p className="text-sm text-[#4A6670]">周边短途</p>
+                  <p className="text-xs text-[#4A6670]/40">2小时可达的周末目的地</p>
+                </div>
+              </button>
+              <button
+                onClick={() => { setShowMenu(false); router.push("/niche"); }}
+                className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-[#F5EDE4] transition-colors text-left"
+              >
+                <Star className="w-5 h-5 text-purple-500" />
+                <div className="flex-1">
+                  <p className="text-sm text-[#4A6670]">小众秘境</p>
+                  <p className="text-xs text-[#4A6670]/40">{nicheCitiesList.length}个宝藏地</p>
+                </div>
+              </button>
+              <button
+                onClick={() => { setShowMenu(false); router.push("/holiday"); }}
+                className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-[#F5EDE4] transition-colors text-left"
+              >
+                <Shield className="w-5 h-5 text-amber-500" />
+                <div className="flex-1">
+                  <p className="text-sm text-[#4A6670]">节假日避坑</p>
+                  <p className="text-xs text-[#4A6670]/40">预警 + Plan B</p>
+                </div>
+              </button>
+            </div>
           </div>
         </div>
-      </nav>
+      )}
 
-      <main className="max-w-2xl mx-auto px-4 pb-20">
-        {/* 核心视觉区 */}
-        <div className="pt-16 pb-10 text-center">
-          <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-[#C8956C] to-[#A67B5B] flex items-center justify-center shadow-lg shadow-[#C8956C]/20">
-            <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" /></svg>
-          </div>
-          <h1 className="text-3xl font-bold text-[#4A6670] mb-2">赴一场人间山海</h1>
-          <p className="text-[#4A6670]/50 text-base">
+      {/* 主内容区 - 极致居中 */}
+      <main className="flex flex-col items-center justify-center min-h-[calc(100vh-3.5rem)] px-4">
+        <div className="w-full max-w-md text-center">
+          {/* 标题区 */}
+          <h1 className="text-2xl font-bold text-[#4A6670] mb-2">赴一场人间山海</h1>
+          <p className="text-sm text-[#4A6670]/50 mb-10">
             挑选心之所向，邂逅独属于你的风景
           </p>
-        </div>
 
-        {/* 主操作按钮 */}
-        <div className="mb-6">
-          <button
-            onClick={handleExplore}
-            disabled={isSpinning}
-            className="w-full py-4.5 bg-gradient-to-r from-[#C8956C] to-[#A67B5B] text-white rounded-2xl font-bold text-lg active:scale-[0.98] transition-transform disabled:opacity-70 animate-breathe"
-          >
-            {isSpinning ? (
+          {/* 盲盒按钮区 */}
+          {blindboxPhase === "idle" && (
+            <button
+              onClick={handleExplore}
+              className="w-full py-5 bg-gradient-to-r from-[#C8956C] to-[#A67B5B] text-white rounded-2xl font-bold text-lg shadow-[0_20px_40px_-10px_rgba(200,149,108,0.5)] hover:shadow-[0_25px_50px_-10px_rgba(200,149,108,0.6)] active:scale-[0.98] transition-all animate-breathe"
+            >
               <span className="flex items-center justify-center gap-2">
-                <Compass className="w-5 h-5 animate-spin" />
-                正在寻找目的地...
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v3" />
+                  <path d="M3 8h18v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8z" />
+                  <path d="M12 8v13" />
+                  <path d="M8 12h8" />
+                </svg>
+                开启旅行盲盒
               </span>
-            ) : (
-              <span className="flex items-center justify-center gap-2">
-                <Sparkles className="w-5 h-5" />
-                探索下一站
-              </span>
-            )}
-          </button>
-          {visitedCityIds.length > 0 && (
-            <p className="text-center text-xs text-[#4A6670]/40 mt-2">
-              已为你屏蔽 {visitedCityIds.length} 个已去过的目的地
-            </p>
+            </button>
           )}
-        </div>
 
-        {/* 偏好筛选 — 轻量文字链接 */}
-        <div className="mb-8">
+          {/* 盲盒动画阶段 */}
+          {blindboxPhase === "shaking" && (
+            <div className="w-full py-5 bg-gradient-to-r from-[#C8956C] to-[#A67B5B] text-white rounded-2xl font-bold text-lg shadow-[0_20px_40px_-10px_rgba(200,149,108,0.5)] animate-blindbox-shake">
+              <span className="flex items-center justify-center gap-2">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v3" />
+                  <path d="M3 8h18v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8z" />
+                  <path d="M12 8v13" />
+                  <path d="M8 12h8" />
+                </svg>
+                正在开启...
+              </span>
+            </div>
+          )}
+
+          {blindboxPhase === "opening" && (
+            <div className="w-full py-5 bg-gradient-to-r from-[#C8956C] to-[#A67B5B] text-white rounded-2xl font-bold text-lg shadow-[0_20px_40px_-10px_rgba(200,149,108,0.5)] animate-blindbox-open">
+              <span className="flex items-center justify-center gap-2">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v3" />
+                  <path d="M3 8h18v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8z" />
+                  <path d="M12 8v13" />
+                  <path d="M8 12h8" />
+                </svg>
+                惊喜揭晓！
+              </span>
+            </div>
+          )}
+
+          {blindboxPhase === "revealing" && revealedCity && (
+            <div className="animate-blindbox-reveal">
+              <div className={`w-full py-5 bg-gradient-to-r ${revealedCity.gradient} text-white rounded-2xl font-bold text-lg shadow-[0_20px_40px_-10px_rgba(200,149,108,0.5)]`}>
+                <span className="flex items-center justify-center gap-2">
+                  <MapPin className="w-5 h-5" />
+                  {revealedCity.name}
+                </span>
+              </div>
+              <p className="text-xs text-[#4A6670]/40 mt-3">正在前往攻略页...</p>
+            </div>
+          )}
+
+          {/* 偏好筛选 - 按钮下方小字 */}
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="mx-auto flex items-center gap-1.5 text-sm text-[#4A6670]/40 hover:text-[#C8956C] transition-colors"
+            className="mt-6 text-xs text-[#4A6670]/30 hover:text-[#C8956C] transition-colors"
           >
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>{hasFilters ? `已选 ${selectedDestTypes.length + selectedDuration.length + selectedBudget.length} 个偏好` : "偏好筛选"}</span>
-            {showFilters ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+            {hasFilters ? `已选 ${selectedDestTypes.length + selectedDuration.length + selectedBudget.length} 个偏好 · 展开` : "想限定范围？自定义偏好"}
           </button>
 
+          {/* 筛选面板 */}
           {showFilters && (
-            <div className="mt-3 bg-white rounded-xl border border-[#C8956C]/8 shadow-sm p-4 animate-fade-in space-y-5">
+            <div className="mt-4 bg-white rounded-xl border border-[#C8956C]/8 shadow-sm p-4 animate-fade-in space-y-4 text-left">
               {/* 目的地类型 */}
               <div>
-                <h3 className="text-xs font-semibold text-[#4A6670]/50 uppercase tracking-wider mb-2">目的地类型</h3>
+                <h3 className="text-xs font-semibold text-[#4A6670]/50 mb-2">目的地类型</h3>
                 <div className="flex flex-wrap gap-2">
                   {Object.entries(destTypeLabels).map(([key, label]) => (
                     <button
@@ -195,7 +303,7 @@ export default function HomePage() {
 
               {/* 出行天数 */}
               <div>
-                <h3 className="text-xs font-semibold text-[#4A6670]/50 uppercase tracking-wider mb-2">出行天数</h3>
+                <h3 className="text-xs font-semibold text-[#4A6670]/50 mb-2">出行天数</h3>
                 <div className="flex flex-wrap gap-2">
                   {Object.entries(durationLabels).map(([key, label]) => (
                     <button
@@ -215,7 +323,7 @@ export default function HomePage() {
 
               {/* 预算档位 */}
               <div>
-                <h3 className="text-xs font-semibold text-[#4A6670]/50 uppercase tracking-wider mb-2">预算档位</h3>
+                <h3 className="text-xs font-semibold text-[#4A6670]/50 mb-2">预算档位</h3>
                 <div className="flex flex-wrap gap-2">
                   {Object.entries(budgetLabels).map(([key, label]) => (
                     <button
@@ -248,102 +356,12 @@ export default function HomePage() {
             </div>
           )}
         </div>
-
-        {/* 本月最佳 — 默认收起 */}
-        <section className="mb-6">
-          <button
-            onClick={() => setShowMonthly(!showMonthly)}
-            className="flex items-center gap-1.5 text-sm text-[#4A6670]/40 hover:text-[#C8956C] transition-colors"
-          >
-            <TrendingUp className="w-3.5 h-3.5" />
-            <span>本月最佳{mounted ? ` · ${seasonLabels[currentSeason]}推荐` : ""}</span>
-            {showMonthly ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
-          </button>
-
-          {showMonthly && mounted && (
-            <div className="mt-3 grid grid-cols-3 gap-3 animate-fade-in">
-              {monthlyRecs.slice(0, 3).map((city) => (
-                <button
-                  key={city.id}
-                  onClick={() => router.push(`/city/${city.id}`)}
-                  className="flex flex-col group relative bg-white rounded-2xl border border-[#C8956C]/10 overflow-hidden hover:shadow-lg hover:shadow-[#C8956C]/10 transition-all text-left"
-                >
-                  <div className={`w-full aspect-[4/1] bg-gradient-to-br ${city.gradient} flex items-end p-2.5`}>
-                    <span className="text-white font-bold text-sm drop-shadow-md">{city.name}</span>
-                  </div>
-                  <div className="p-2.5">
-                    <p className="text-[11px] text-[#4A6670]/60 line-clamp-2 leading-relaxed mb-1.5">{city.tagline}</p>
-                    <div className="flex items-center gap-1">
-                      <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-[#F5EDE4] text-[#C8956C]">{city.duration}</span>
-                    </div>
-                  </div>
-                </button>
-              ))}
-            </div>
-          )}
-        </section>
-
-        {/* 快捷入口 — 默认收起 */}
-        <section>
-          <button
-            onClick={() => setShowShortcuts(!showShortcuts)}
-            className="flex items-center gap-1.5 text-sm text-[#4A6670]/40 hover:text-[#C8956C] transition-colors"
-          >
-            <Map className="w-3.5 h-3.5" />
-            <span>快捷入口</span>
-            {showShortcuts ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
-          </button>
-
-          {showShortcuts && (
-            <div className="mt-3 space-y-3 animate-fade-in">
-              {/* 周边短途 */}
-              <button
-                onClick={() => router.push("/nearby")}
-                className="w-full bg-white rounded-xl border border-[#C8956C]/10 p-4 flex items-center gap-4 hover:shadow-md transition-shadow text-left"
-              >
-                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-green-400 to-emerald-300 flex items-center justify-center shrink-0">
-                  <MapPin className="w-5 h-5 text-white" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-bold text-[#4A6670] text-sm">周边短途</h3>
-                  <p className="text-xs text-[#4A6670]/50 mt-0.5">2小时高铁/自驾可达的周末目的地</p>
-                </div>
-                <ChevronDown className="w-4 h-4 text-[#4A6670]/30 -rotate-90" />
-              </button>
-
-              {/* 小众秘境 */}
-              <button
-                onClick={() => router.push("/niche")}
-                className="w-full bg-white rounded-xl border border-[#C8956C]/10 p-4 flex items-center gap-4 hover:shadow-md transition-shadow text-left"
-              >
-                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-purple-400 to-indigo-300 flex items-center justify-center shrink-0">
-                  <Star className="w-5 h-5 text-white" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-bold text-[#4A6670] text-sm">小众秘境</h3>
-                  <p className="text-xs text-[#4A6670]/50 mt-0.5">{nicheCitiesList.length}个非网红人少景美的宝藏地</p>
-                </div>
-                <ChevronDown className="w-4 h-4 text-[#4A6670]/30 -rotate-90" />
-              </button>
-
-              {/* 节假日预警 */}
-              <button
-                onClick={() => router.push("/holiday")}
-                className="w-full bg-white rounded-xl border border-[#C8956C]/10 p-4 flex items-center gap-4 hover:shadow-md transition-shadow text-left"
-              >
-                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-amber-400 to-orange-300 flex items-center justify-center shrink-0">
-                  <Shield className="w-5 h-5 text-white" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-bold text-[#4A6670] text-sm">节假日避坑</h3>
-                  <p className="text-xs text-[#4A6670]/50 mt-0.5">热门景区预警 + Plan B替代方案</p>
-                </div>
-                <ChevronDown className="w-4 h-4 text-[#4A6670]/30 -rotate-90" />
-              </button>
-            </div>
-          )}
-        </section>
       </main>
+
+      {/* 底部极浅辅助信息 */}
+      <footer className="fixed bottom-0 inset-x-0 pb-4 text-center pointer-events-none">
+        <p className="text-[10px] text-[#4A6670]/20">已收录 200+ 目的地与原创攻略</p>
+      </footer>
     </div>
   );
 }

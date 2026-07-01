@@ -4,7 +4,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: {
-    default: '行囊 | 赴一场人间山海',
+    default: '行囊 | 旅行盲盒',
     template: '%s | 行囊',
   },
   description:
@@ -21,9 +21,9 @@ export const metadata: Metadata = {
     icon: '/favicon.svg',
   },
   openGraph: {
-    title: '行囊 | 赴一场人间山海',
+    title: '行囊 | 旅行盲盒',
     description:
-      '挑选心之所向，邂逅独属于你的风景。随机推荐国内旅行目的地，包含最佳时间、避坑指南、好玩好吃好逛推荐。',
+      '不必纠结去哪，轻点开启旅行盲盒，随机邂逅一座城，收获全套游玩攻略。',
     locale: 'zh_CN',
     type: 'website',
   },
