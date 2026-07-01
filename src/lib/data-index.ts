@@ -2,9 +2,10 @@ import type { CityGuide } from "./types";
 import { cities } from "./city-data";
 import { moreCities } from "./more-data";
 import { nicheCities } from "./niche-data";
+import { newCities } from "./new-cities";
 
-/** 所有城市数据（热门 + 更多 + 小众） */
-export const allCities: CityGuide[] = [...cities, ...moreCities, ...nicheCities];
+/** 所有城市数据（热门 + 更多 + 小众 + 新增） */
+export const allCities: CityGuide[] = [...cities, ...moreCities, ...nicheCities, ...newCities];
 
 /** 热门城市（非小众） */
 export const popularCities: CityGuide[] = allCities.filter((c) => !c.isNiche);

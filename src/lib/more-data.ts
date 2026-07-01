@@ -338,4 +338,356 @@ export const moreCities: CityGuide[] = [
       { name: "充电宝(低温耗电快)", category: "electronics", required: true },
     ],
   },
+  {
+    id: "zhuhai", name: "珠海", province: "广东", tagline: "百岛之市，浪漫之城", gradient: "from-cyan-300 via-teal-200 to-blue-200",
+    isNiche: false, destTypes: ["island", "food_city"], durationRange: "1-3d", budgetRange: "comfort", seasons: ["spring", "autumn", "winter"],
+    bestTime: "10月-次年3月", duration: "2-3天", budget: "人均800-1500元", transportHub: "金湾机场/珠海站",
+    coreTip: "长隆海洋王国提前网上订票便宜",
+    funSpots: [
+      { name: "长隆海洋王国", tagline: "世界级海洋主题公园", ticket: "395元", duration: "1天", bestTime: "全天", tips: "提前网上订票，避开周末", priority: "must" },
+      { name: "情侣路", tagline: "浪漫海滨路", ticket: "免费", duration: "2-3小时", bestTime: "傍晚", tips: "渔女雕像打卡，看日落", priority: "must" },
+      { name: "圆明新园", tagline: "皇家园林复原", ticket: "免费", duration: "2-3小时", bestTime: "上午", tips: "1:1复原圆明园部分景观", priority: "niche" },
+      { name: "东澳岛", tagline: "海岛度假", ticket: "船票150元", duration: "1-2天", bestTime: "5-10月", tips: "沙滩细腻，适合度假", priority: "nearby" },
+    ],
+    food: [
+      { name: "海鲜", pricePerPerson: "100-200元", howToEat: "横琴蚝最出名", pitfall: "湾仔海鲜街买海鲜加工" },
+      { name: "横琴蚝", pricePerPerson: "60-100元", howToEat: "清蒸或蒜蓉，鲜嫩肥美", pitfall: "横琴镇最正宗" },
+      { name: "葡式蛋挞", pricePerPerson: "10-15元", howToEat: "外酥内滑，焦糖香", pitfall: "安德鲁饼店" },
+    ],
+    foodAreas: [
+      { name: "湾仔海鲜街", location: "香洲区湾仔", bestTime: "晚餐", direction: "买海鲜加工" },
+      { name: "拱北口岸", location: "香洲区拱北", bestTime: "晚餐", direction: "小吃+餐厅" },
+    ],
+    shopping: [
+      { name: "华发商都", category: "mall", duration: "2-3小时", highlight: "珠海最大商场", forWho: "购物" },
+      { name: "拱北口岸", category: "old_street", duration: "1-2小时", highlight: "免税商品", forWho: "购物" },
+    ],
+    pitfalls: [
+      { category: "scenic", content: "长隆海洋王国周末人多，工作日去" },
+      { category: "food", content: "海鲜先问价再买，防宰客" },
+      { category: "general", content: "带防晒霜，海边紫外线强" },
+    ],
+    itinerary: {
+      easy: [
+        { label: "Day1", morning: ["长隆海洋王国"], afternoon: ["长隆"], evening: ["湾仔海鲜街"], walkLevel: "约1.5万步", transport: "打车", nearbyFood: "湾仔" },
+        { label: "Day2", morning: ["情侣路"], afternoon: ["圆明新园"], evening: ["拱北口岸"], walkLevel: "约1万步", transport: "公交", nearbyFood: "拱北" },
+      ],
+      intense: [
+        { label: "Day1", morning: ["长隆海洋王国"], afternoon: ["长隆"], evening: ["湾仔海鲜街"], walkLevel: "约2万步", transport: "打车", nearbyFood: "湾仔" },
+        { label: "Day2", morning: ["东澳岛"], afternoon: ["东澳岛"], evening: ["情侣路"], walkLevel: "约1.5万步", transport: "船", nearbyFood: "情侣路" },
+        { label: "Day3", morning: ["圆明新园"], afternoon: ["拱北口岸"], evening: ["华发商都"], walkLevel: "约1.2万步", transport: "公交", nearbyFood: "拱北" },
+      ],
+    },
+    packingList: [
+      { name: "泳衣", category: "clothing", required: true },
+      { name: "防晒霜", category: "gear", required: true },
+      { name: "轻薄外套", category: "clothing", required: true },
+      { name: "身份证", category: "docs", required: true },
+    ],
+    nearbyFrom: ["深圳", "广州", "澳门"],
+    nearbyDistance: "高铁1小时/自驾2小时",
+    holidayWarning: "国庆/五一大长隆排队2小时+",
+    holidayAlternative: "东澳岛人少",
+  },
+  {
+    id: "huizhou", name: "惠州", province: "广东", tagline: "岭南名郡，半城山色半城湖", gradient: "from-green-300 via-emerald-200 to-teal-200",
+    isNiche: false, destTypes: ["nature", "ancient_city"], durationRange: "1-3d", budgetRange: "budget", seasons: ["spring", "autumn", "winter"],
+    bestTime: "10月-次年3月", duration: "2-3天", budget: "人均600-1200元", transportHub: "惠州站/惠州南站",
+    coreTip: "巽寮湾周末人满为患，工作日去",
+    funSpots: [
+      { name: "巽寮湾", tagline: "天赐白沙堤", ticket: "免费", duration: "3-4小时", bestTime: "下午", tips: "沙质细腻，水清见底", priority: "must" },
+      { name: "西湖", tagline: "惠州西湖", ticket: "免费", duration: "2-3小时", bestTime: "傍晚", tips: "苏东坡遗迹，比杭州西湖人少", priority: "must" },
+      { name: "罗浮山", tagline: "道教名山", ticket: "54元", duration: "半天", bestTime: "上午", tips: "冲虚古观+飞来石", priority: "niche" },
+      { name: "双月湾", tagline: "双湾奇观", ticket: "免费", duration: "3-4小时", bestTime: "下午", tips: "两个半月形海湾，观景台看全景", priority: "nearby" },
+    ],
+    food: [
+      { name: "海鲜", pricePerPerson: "80-150元", howToEat: "巽寮湾海鲜大排档", pitfall: "先问价再点" },
+      { name: "梅菜扣肉", pricePerPerson: "40-60元", howToEat: "惠州特产，肥而不腻", pitfall: "东江菜馆最正宗" },
+      { name: "盐焗鸡", pricePerPerson: "50-80元", howToEat: "皮爽肉滑，咸香入味", pitfall: "东江盐焗鸡" },
+    ],
+    foodAreas: [
+      { name: "巽寮湾", location: "惠东县巽寮湾", bestTime: "晚餐", direction: "海鲜大排档" },
+      { name: "步行街", location: "惠城区步行街", bestTime: "晚餐", direction: "小吃+餐厅" },
+    ],
+    shopping: [
+      { name: "华贸天地", category: "mall", duration: "2-3小时", highlight: "惠州最大商场", forWho: "购物" },
+    ],
+    pitfalls: [
+      { category: "scenic", content: "巽寮湾周末人挤人，工作日去" },
+      { category: "food", content: "海鲜先问价，防宰客" },
+      { category: "traffic", content: "去巽寮湾堵车严重，提前出发" },
+    ],
+    itinerary: {
+      easy: [
+        { label: "Day1", morning: ["巽寮湾"], afternoon: ["巽寮湾游泳"], evening: ["巽寮湾海鲜"], walkLevel: "约8千步", transport: "自驾", nearbyFood: "巽寮湾" },
+        { label: "Day2", morning: ["西湖"], afternoon: ["罗浮山"], evening: ["步行街"], walkLevel: "约1.2万步", transport: "自驾", nearbyFood: "步行街" },
+      ],
+      intense: [
+        { label: "Day1", morning: ["巽寮湾"], afternoon: ["双月湾"], evening: ["巽寮湾"], walkLevel: "约1.5万步", transport: "自驾", nearbyFood: "巽寮湾" },
+        { label: "Day2", morning: ["西湖"], afternoon: ["罗浮山"], evening: ["步行街"], walkLevel: "约1.8万步", transport: "自驾", nearbyFood: "步行街" },
+        { label: "Day3", morning: ["南昆山"], afternoon: ["南昆山→返程"], evening: ["惠州市区"], walkLevel: "约1.5万步", transport: "自驾", nearbyFood: "市区" },
+      ],
+    },
+    packingList: [
+      { name: "泳衣", category: "clothing", required: true },
+      { name: "防晒霜", category: "gear", required: true },
+      { name: "轻薄外套", category: "clothing", required: true },
+      { name: "身份证", category: "docs", required: true },
+    ],
+    nearbyFrom: ["深圳", "广州"],
+    nearbyDistance: "自驾1.5小时/高铁1小时",
+    holidayWarning: "国庆/五一巽寮湾堵车3小时+",
+    holidayAlternative: "双月湾人少",
+  },
+  {
+    id: "dongguan", name: "东莞", province: "广东", tagline: "世界工厂，制造之都", gradient: "from-gray-300 via-slate-200 to-zinc-200",
+    isNiche: false, destTypes: ["ancient_city"], durationRange: "1-3d", budgetRange: "budget", seasons: ["spring", "autumn", "winter"],
+    bestTime: "10月-次年3月", duration: "1-2天", budget: "人均500-1000元", transportHub: "东莞站/东莞东站",
+    coreTip: "松山湖适合骑行，环境好",
+    funSpots: [
+      { name: "松山湖", tagline: "科技产业园", ticket: "免费", duration: "2-3小时", bestTime: "下午骑行", tips: "华为欧洲小镇，环境优美", priority: "must" },
+      { name: "可园", tagline: "岭南四大名园", ticket: "8元", duration: "1-2小时", bestTime: "上午", tips: "岭南园林代表，小巧精致", priority: "must" },
+      { name: "观音山", tagline: "森林公园", ticket: "45元", duration: "半天", bestTime: "上午", tips: "天然氧吧，登山健身", priority: "niche" },
+      { name: "下坝坊", tagline: "东莞鼓浪屿", ticket: "免费", duration: "2小时", bestTime: "下午", tips: "文艺小巷，咖啡馆", priority: "nearby" },
+    ],
+    food: [
+      { name: "烧鹅", pricePerPerson: "50-80元", howToEat: "皮脆肉嫩，蘸酸梅酱", pitfall: "厚街烧鹅最出名" },
+      { name: "濑粉", pricePerPerson: "10-15元", howToEat: "东莞米粉，汤鲜粉滑", pitfall: "厚街濑粉" },
+      { name: "道滘粽", pricePerPerson: "5-10元", howToEat: "咸肉粽，料足味美", pitfall: "道滘镇最正宗" },
+    ],
+    foodAreas: [
+      { name: "下坝坊", location: "南城区下坝坊", bestTime: "下午茶", direction: "咖啡馆+小吃" },
+      { name: "东城步行街", location: "东城区东城步行街", bestTime: "晚餐", direction: "餐厅+小吃" },
+    ],
+    shopping: [
+      { name: "东城万达广场", category: "mall", duration: "2-3小时", highlight: "东莞热闹商场", forWho: "购物" },
+    ],
+    pitfalls: [
+      { category: "scenic", content: "景点较少，适合短途休闲" },
+      { category: "traffic", content: "高峰期堵车，地铁不方便" },
+    ],
+    itinerary: {
+      easy: [
+        { label: "Day1", morning: ["可园"], afternoon: ["松山湖骑行"], evening: ["下坝坊"], walkLevel: "约1万步", transport: "自驾", nearbyFood: "下坝坊" },
+      ],
+      intense: [
+        { label: "Day1", morning: ["可园"], afternoon: ["松山湖"], evening: ["下坝坊"], walkLevel: "约1.2万步", transport: "自驾", nearbyFood: "下坝坊" },
+        { label: "Day2", morning: ["观音山"], afternoon: ["观音山→返程"], evening: ["东城步行街"], walkLevel: "约1.5万步", transport: "自驾", nearbyFood: "东城" },
+      ],
+    },
+    packingList: [
+      { name: "舒适步行鞋", category: "clothing", required: true },
+      { name: "身份证", category: "docs", required: true },
+    ],
+    nearbyFrom: ["深圳", "广州"],
+    nearbyDistance: "自驾1小时/高铁30分钟",
+    holidayWarning: "国庆/五一松山湖人多",
+    holidayAlternative: "可园人少",
+  },
+  {
+    id: "zhongshan", name: "中山", province: "广东", tagline: "伟人故里，香山文化", gradient: "from-amber-300 via-orange-200 to-red-200",
+    isNiche: false, destTypes: ["ancient_city", "food_city"], durationRange: "1-3d", budgetRange: "budget", seasons: ["spring", "autumn", "winter"],
+    bestTime: "10月-次年3月", duration: "1-2天", budget: "人均500-1000元", transportHub: "中山站/中山北站",
+    coreTip: "孙中山故居免费，了解历史",
+    funSpots: [
+      { name: "孙中山故居", tagline: "伟人故里", ticket: "免费", duration: "2小时", bestTime: "上午", tips: "了解孙中山生平，免费参观", priority: "must" },
+      { name: "中山影视城", tagline: "民国风情", ticket: "65元", duration: "2-3小时", bestTime: "全天", tips: "民国建筑，拍照圣地", priority: "must" },
+      { name: "岐江公园", tagline: "工业遗址公园", ticket: "免费", duration: "1-2小时", bestTime: "傍晚", tips: "旧船厂改造，工业风", priority: "niche" },
+      { name: "詹园", tagline: "岭南私家园林", ticket: "50元", duration: "1-2小时", bestTime: "上午", tips: "岭南园林代表，小巧精致", priority: "nearby" },
+    ],
+    food: [
+      { name: "石岐乳鸽", pricePerPerson: "60-100元", howToEat: "皮脆肉嫩，一口爆汁", pitfall: "石岐鸽最出名" },
+      { name: "小榄炸鱼球", pricePerPerson: "15-25元", howToEat: "外酥里嫩，蘸蚬蚧酱", pitfall: "小榄镇最正宗" },
+      { name: "东升脆肉鲩", pricePerPerson: "60-100元", howToEat: "鱼肉爽脆，打边炉", pitfall: "东升镇最正宗" },
+    ],
+    foodAreas: [
+      { name: "孙文西路步行街", location: "石岐区孙文西路", bestTime: "晚餐", direction: "小吃+餐厅" },
+      { name: "大信新都汇", location: "石岐区大信", bestTime: "晚餐", direction: "现代餐厅" },
+    ],
+    shopping: [
+      { name: "大信新都汇", category: "mall", duration: "2-3小时", highlight: "中山热闹商场", forWho: "购物" },
+      { name: "孙文西路步行街", category: "old_street", duration: "1-2小时", highlight: "骑楼建筑", forWho: "散步" },
+    ],
+    pitfalls: [
+      { category: "scenic", content: "景点较少，适合短途休闲" },
+      { category: "food", content: "石岐乳鸽要趁热吃" },
+    ],
+    itinerary: {
+      easy: [
+        { label: "Day1", morning: ["孙中山故居"], afternoon: ["中山影视城"], evening: ["孙文西路"], walkLevel: "约1万步", transport: "自驾", nearbyFood: "孙文西路" },
+      ],
+      intense: [
+        { label: "Day1", morning: ["孙中山故居"], afternoon: ["中山影视城"], evening: ["孙文西路"], walkLevel: "约1.2万步", transport: "自驾", nearbyFood: "孙文西路" },
+        { label: "Day2", morning: ["詹园"], afternoon: ["岐江公园"], evening: ["大信新都汇"], walkLevel: "约1万步", transport: "自驾", nearbyFood: "大信" },
+      ],
+    },
+    packingList: [
+      { name: "舒适步行鞋", category: "clothing", required: true },
+      { name: "身份证", category: "docs", required: true },
+    ],
+    nearbyFrom: ["深圳", "广州", "珠海"],
+    nearbyDistance: "自驾1.5小时/高铁1小时",
+    holidayWarning: "国庆/五一孙中山故居排队",
+    holidayAlternative: "詹园人少",
+  },
+  {
+    id: "foshan", name: "佛山", province: "广东", tagline: "武术之乡，美食之都", gradient: "from-red-300 via-rose-200 to-pink-200",
+    isNiche: false, destTypes: ["ancient_city", "food_city"], durationRange: "1-3d", budgetRange: "budget", seasons: ["spring", "autumn", "winter"],
+    bestTime: "10月-次年3月", duration: "1-2天", budget: "人均500-1000元", transportHub: "佛山站/佛山西站",
+    coreTip: "祖庙看黄飞鸿武术表演",
+    funSpots: [
+      { name: "祖庙", tagline: "佛山地标", ticket: "20元", duration: "2-3小时", bestTime: "上午", tips: "黄飞鸿纪念馆+武术表演", priority: "must" },
+      { name: "南风古灶", tagline: "陶瓷文化", ticket: "25元", duration: "2小时", bestTime: "上午", tips: "500年古窑，体验陶艺", priority: "must" },
+      { name: "清晖园", tagline: "岭南四大名园", ticket: "15元", duration: "1-2小时", bestTime: "上午", tips: "岭南园林代表，小巧精致", priority: "niche" },
+      { name: "岭南天地", tagline: "历史文化街区", ticket: "免费", duration: "2-3小时", bestTime: "下午+晚上", tips: "骑楼建筑，文艺小店", priority: "nearby" },
+    ],
+    food: [
+      { name: "双皮奶", pricePerPerson: "10-15元", howToEat: "顺德双皮奶最正宗", pitfall: "民信老铺" },
+      { name: "盲公饼", pricePerPerson: "10-15元", howToEat: "佛山特产，酥脆香甜", pitfall: "盲公饼最出名" },
+      { name: "扎蹄", pricePerPerson: "30-50元", howToEat: "佛山酝扎蹄，卤味", pitfall: "李禧记最正宗" },
+      { name: "顺德鱼生", pricePerPerson: "60-100元", howToEat: "鱼肉切片，配料拌食", pitfall: "顺德最正宗" },
+    ],
+    foodAreas: [
+      { name: "岭南天地", location: "禅城区岭南天地", bestTime: "晚餐", direction: "餐厅+咖啡馆" },
+      { name: "华辉拉肠", location: "禅城区", bestTime: "早餐", direction: "拉肠粉" },
+    ],
+    shopping: [
+      { name: "岭南天地", category: "old_street", duration: "2-3小时", highlight: "历史文化街区", forWho: "散步/购物" },
+      { name: "祖庙商圈", category: "mall", duration: "2-3小时", highlight: "热闹商圈", forWho: "购物" },
+    ],
+    pitfalls: [
+      { category: "scenic", content: "祖庙武术表演时间固定，提前查" },
+      { category: "food", content: "顺德菜最正宗，去顺德吃" },
+    ],
+    itinerary: {
+      easy: [
+        { label: "Day1", morning: ["祖庙"], afternoon: ["岭南天地"], evening: ["岭南天地"], walkLevel: "约1万步", transport: "步行", nearbyFood: "岭南天地" },
+      ],
+      intense: [
+        { label: "Day1", morning: ["祖庙"], afternoon: ["南风古灶"], evening: ["岭南天地"], walkLevel: "约1.2万步", transport: "公交", nearbyFood: "岭南天地" },
+        { label: "Day2", morning: ["清晖园"], afternoon: ["顺德吃鱼生"], evening: ["顺德→返程"], walkLevel: "约1万步", transport: "自驾", nearbyFood: "顺德" },
+      ],
+    },
+    packingList: [
+      { name: "舒适步行鞋", category: "clothing", required: true },
+      { name: "身份证", category: "docs", required: true },
+    ],
+    nearbyFrom: ["广州", "深圳"],
+    nearbyDistance: "自驾1小时/高铁30分钟",
+    holidayWarning: "国庆/五一祖庙人多",
+    holidayAlternative: "岭南天地人少",
+  },
+  {
+    id: "macau", name: "澳门", province: "澳门", tagline: "东方蒙特卡洛，中西交融", gradient: "from-purple-300 via-violet-200 to-fuchsia-200",
+    isNiche: false, destTypes: ["ancient_city", "food_city"], durationRange: "1-3d", budgetRange: "luxury", seasons: ["spring", "autumn", "winter"],
+    bestTime: "10月-次年3月", duration: "2-3天", budget: "人均2000-5000元", transportHub: "澳门机场/拱北口岸",
+    coreTip: "赌场免费进场，别赌太大",
+    funSpots: [
+      { name: "大三巴牌坊", tagline: "澳门地标", ticket: "免费", duration: "1小时", bestTime: "上午", tips: "拍照打卡，人很多", priority: "must" },
+      { name: "威尼斯人", tagline: "豪华度假村", ticket: "免费", duration: "2-3小时", bestTime: "全天", tips: "室内运河+贡多拉，拍照圣地", priority: "must" },
+      { name: "妈阁庙", tagline: "澳门最古老庙宇", ticket: "免费", duration: "1-2小时", bestTime: "上午", tips: "澳门名称来源", priority: "must" },
+      { name: "路环岛", tagline: "宁静海岛", ticket: "免费", duration: "半天", bestTime: "下午", tips: "远离赌场喧嚣，安静", priority: "niche" },
+      { name: "议事亭前地", tagline: "喷水池广场", ticket: "免费", duration: "1-2小时", bestTime: "傍晚", tips: "欧式建筑，拍照好看", priority: "nearby" },
+    ],
+    food: [
+      { name: "葡式蛋挞", pricePerPerson: "15-25元", howToEat: "外酥内滑，焦糖香", pitfall: "安德鲁饼店最正宗" },
+      { name: "猪扒包", pricePerPerson: "30-50元", howToEat: "猪排酥脆，面包松软", pitfall: "大利来咖啡" },
+      { name: "水蟹粥", pricePerPerson: "80-120元", howToEat: "蟹肉鲜甜，粥底绵滑", pitfall: "诚昌饭店" },
+      { name: "非洲鸡", pricePerPerson: "60-100元", howToEat: "葡国菜代表，香料浓郁", pitfall: "船屋葡国餐厅" },
+    ],
+    foodAreas: [
+      { name: "官也街", location: "氹仔官也街", bestTime: "下午+晚餐", direction: "小吃+餐厅" },
+      { name: "大三巴街", location: "澳门半岛大三巴街", bestTime: "下午", direction: "小吃+手信" },
+    ],
+    shopping: [
+      { name: "威尼斯人", category: "mall", duration: "3-4小时", highlight: "豪华购物中心", forWho: "购物" },
+      { name: "新马路", category: "old_street", duration: "2-3小时", highlight: "传统商业街", forWho: "购物/散步" },
+    ],
+    pitfalls: [
+      { category: "scenic", content: "大三巴人挤人，早上去" },
+      { category: "food", content: "官也街小吃贵，但味道好" },
+      { category: "general", content: "赌场免费进场，别赌太大" },
+      { category: "traffic", content: "拱北口岸周末排队1小时+" },
+    ],
+    itinerary: {
+      easy: [
+        { label: "Day1", morning: ["大三巴牌坊"], afternoon: ["议事亭前地"], evening: ["威尼斯人"], walkLevel: "约1.5万步", transport: "步行+赌场巴士", nearbyFood: "官也街" },
+        { label: "Day2", morning: ["妈阁庙"], afternoon: ["路环岛"], evening: ["新马路"], walkLevel: "约1.2万步", transport: "公交", nearbyFood: "新马路" },
+      ],
+      intense: [
+        { label: "Day1", morning: ["大三巴牌坊"], afternoon: ["议事亭前地→妈阁庙"], evening: ["威尼斯人"], walkLevel: "约2万步", transport: "步行+赌场巴士", nearbyFood: "官也街" },
+        { label: "Day2", morning: ["路环岛"], afternoon: ["黑沙海滩"], evening: ["新马路"], walkLevel: "约1.5万步", transport: "公交", nearbyFood: "新马路" },
+        { label: "Day3", morning: ["渔人码头"], afternoon: ["旅游塔"], evening: ["拱北口岸"], walkLevel: "约1.5万步", transport: "公交", nearbyFood: "拱北" },
+      ],
+    },
+    packingList: [
+      { name: "舒适步行鞋", category: "clothing", required: true },
+      { name: "身份证+港澳通行证", category: "docs", required: true },
+      { name: "充电宝", category: "electronics", required: true },
+    ],
+    nearbyFrom: ["深圳", "珠海", "广州"],
+    nearbyDistance: "自驾2小时/船1小时",
+    holidayWarning: "国庆/春节拱北口岸排队2小时+",
+    holidayAlternative: "横琴口岸人少",
+  },
+  {
+    id: "hongkong", name: "香港", province: "香港", tagline: "东方之珠，购物天堂", gradient: "from-blue-400 via-indigo-300 to-purple-200",
+    isNiche: false, destTypes: ["ancient_city", "food_city"], durationRange: "4-7d", budgetRange: "luxury", seasons: ["spring", "autumn", "winter"],
+    bestTime: "10月-次年3月", duration: "3-5天", budget: "人均3000-8000元", transportHub: "香港机场/西九龙站",
+    coreTip: "八达通必备，交通购物都能用",
+    funSpots: [
+      { name: "维多利亚港", tagline: "世界三大夜景", ticket: "免费", duration: "2小时", bestTime: "晚上", tips: "星光大道看夜景，幻彩咏香江", priority: "must" },
+      { name: "太平山顶", tagline: "香港之巅", ticket: "缆车88元", duration: "2-3小时", bestTime: "傍晚", tips: "凌霄阁观景台看全景", priority: "must" },
+      { name: "迪士尼乐园", tagline: "童话世界", ticket: "639元", duration: "1天", bestTime: "全天", tips: "提前网上订票，避开周末", priority: "must" },
+      { name: "旺角", tagline: "繁华商圈", ticket: "免费", duration: "2-3小时", bestTime: "下午+晚上", tips: "女人街+波鞋街，购物天堂", priority: "niche" },
+      { name: "大屿山", tagline: "佛教圣地", ticket: "免费(缆车另付)", duration: "半天", bestTime: "上午", tips: "天坛大佛+宝莲禅寺", priority: "nearby" },
+    ],
+    food: [
+      { name: "港式奶茶", pricePerPerson: "15-25元", howToEat: "丝袜奶茶，茶味浓郁", pitfall: "兰芳园最正宗" },
+      { name: "菠萝油", pricePerPerson: "10-15元", howToEat: "菠萝包+黄油，冷热交融", pitfall: "金华冰厅" },
+      { name: "云吞面", pricePerPerson: "30-50元", howToEat: "竹升面爽滑，云吞鲜美", pitfall: "吴财记" },
+      { name: "烧腊饭", pricePerPerson: "40-60元", howToEat: "烧鹅叉烧饭，肉香饭软", pitfall: "再兴烧腊" },
+      { name: "鸡蛋仔", pricePerPerson: "15-20元", howToEat: "外酥内软，甜香", pitfall: "利强记" },
+    ],
+    foodAreas: [
+      { name: "庙街夜市", location: "油麻地庙街", bestTime: "夜宵", direction: "大排档+小吃" },
+      { name: "铜锣湾", location: "铜锣湾", bestTime: "晚餐", direction: "餐厅+小吃" },
+      { name: "旺角", location: "旺角", bestTime: "晚餐/夜宵", direction: "小吃+餐厅" },
+    ],
+    shopping: [
+      { name: "海港城", category: "mall", duration: "3-4小时", highlight: "香港最大商场", forWho: "购物" },
+      { name: "铜锣湾", category: "mall", duration: "3-4小时", highlight: "时尚购物区", forWho: "购物" },
+      { name: "旺角", category: "old_street", duration: "2-3小时", highlight: "女人街+波鞋街", forWho: "购物" },
+    ],
+    pitfalls: [
+      { category: "scenic", content: "迪士尼周末人多，工作日去" },
+      { category: "food", content: "茶餐厅排队久，避开高峰" },
+      { category: "traffic", content: "地铁高峰期拥挤，避开高峰" },
+      { category: "general", content: "消费水平高，做好预算" },
+    ],
+    itinerary: {
+      easy: [
+        { label: "Day1", morning: ["太平山顶"], afternoon: ["中环"], evening: ["维多利亚港"], walkLevel: "约1.5万步", transport: "地铁+缆车", nearbyFood: "中环" },
+        { label: "Day2", morning: ["迪士尼乐园"], afternoon: ["迪士尼"], evening: ["旺角"], walkLevel: "约2万步", transport: "地铁", nearbyFood: "旺角" },
+        { label: "Day3", morning: ["大屿山"], afternoon: ["东涌"], evening: ["铜锣湾"], walkLevel: "约1.2万步", transport: "地铁+缆车", nearbyFood: "铜锣湾" },
+      ],
+      intense: [
+        { label: "Day1", morning: ["太平山顶"], afternoon: ["中环→兰桂坊"], evening: ["维多利亚港"], walkLevel: "约2万步", transport: "地铁+缆车", nearbyFood: "中环" },
+        { label: "Day2", morning: ["迪士尼乐园"], afternoon: ["迪士尼"], evening: ["旺角"], walkLevel: "约2.5万步", transport: "地铁", nearbyFood: "旺角" },
+        { label: "Day3", morning: ["大屿山"], afternoon: ["东涌"], evening: ["铜锣湾"], walkLevel: "约1.5万步", transport: "地铁+缆车", nearbyFood: "铜锣湾" },
+        { label: "Day4", morning: ["海洋公园"], afternoon: ["海洋公园"], evening: ["庙街夜市"], walkLevel: "约2万步", transport: "地铁", nearbyFood: "庙街" },
+        { label: "Day5", morning: ["南丫岛"], afternoon: ["南丫岛→返程"], evening: ["机场"], walkLevel: "约1.5万步", transport: "船", nearbyFood: "南丫岛" },
+      ],
+    },
+    packingList: [
+      { name: "舒适步行鞋", category: "clothing", required: true },
+      { name: "身份证+港澳通行证", category: "docs", required: true },
+      { name: "充电宝", category: "electronics", required: true },
+      { name: "八达通", category: "electronics", required: true },
+    ],
+    nearbyFrom: ["深圳", "广州", "澳门"],
+    nearbyDistance: "高铁1小时/船1小时",
+    holidayWarning: "国庆/春节迪士尼排队2小时+",
+    holidayAlternative: "南丫岛人少",
+  },
 ];
