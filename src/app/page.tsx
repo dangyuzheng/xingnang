@@ -330,7 +330,7 @@ export default function HomePage() {
 
       {/* 底部极浅辅助信息 */}
       <footer className="fixed bottom-0 inset-x-0 pb-4 text-center pointer-events-none">
-        <p className="text-[10px] text-[#4A6670]/20">已收录 200+ 目的地与原创攻略</p>
+        <p className="text-[10px] text-[#4A6670]/20">已收录 {allCities?.length * 2}+ 目的地与原创攻略</p>
       </footer>
     </div>
   );
