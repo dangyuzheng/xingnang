@@ -148,11 +148,11 @@ export default function HomePage() {
                     onClick={() => { setShowMenu(false); router.push(`/city/${city.id}`); }}
                     className="flex flex-col rounded-xl overflow-hidden hover:shadow-md transition-shadow text-left"
                   >
-                    <div className={`w-full aspect-[3/2] bg-gradient-to-br ${city.gradient} flex items-end p-3`}>
+                    <div className={`w-full aspect-[4/1] bg-gradient-to-br ${city.gradient} flex items-end p-2`}>
                       <span className="text-white font-bold text-sm drop-shadow-md">{city.name}</span>
                     </div>
-                    <div className="p-2.5 bg-[#F5EDE4]">
-                      <p className="text-xs text-[#4A6670]/60 line-clamp-1">{city.duration}</p>
+                    <div className="w-full p-2.5 bg-[#F5EDE4]">
+                      <p className="text-sm text-[#4A6670]/60 line-clamp-1">{city.duration}</p>
                     </div>
                   </button>
                 ))}
