@@ -136,23 +136,23 @@ export default function HomePage() {
 
             {/* 本月最佳 */}
             <div className="border-t border-[#C8956C]/10 pt-3">
-              <div className="flex items-center gap-2 mb-2 px-3">
+              <div className="flex items-center gap-2 mb-3 px-3">
                 <TrendingUp className="w-4 h-4 text-[#C8956C]" />
                 <span className="text-sm text-[#4A6670]">本月最佳</span>
                 <span className="text-xs text-[#4A6670]/40">{mounted ? seasonLabels[currentSeason] : ""}</span>
               </div>
-              <div className="grid grid-cols-3 gap-2 px-3">
+              <div className="grid grid-cols-3 gap-3 px-3">
                 {monthlyRecs.slice(0, 3).map((city) => (
                   <button
                     key={city.id}
                     onClick={() => { setShowMenu(false); router.push(`/city/${city.id}`); }}
                     className="flex flex-col rounded-xl overflow-hidden hover:shadow-md transition-shadow text-left"
                   >
-                    <div className={`w-full aspect-[4/1] bg-gradient-to-br ${city.gradient} flex items-end p-2`}>
-                      <span className="text-white font-bold text-xs drop-shadow-md">{city.name}</span>
+                    <div className={`w-full aspect-[3/2] bg-gradient-to-br ${city.gradient} flex items-end p-3`}>
+                      <span className="text-white font-bold text-sm drop-shadow-md">{city.name}</span>
                     </div>
-                    <div className="p-2 bg-[#F5EDE4]">
-                      <p className="text-[10px] text-[#4A6670]/60 line-clamp-1">{city.duration}</p>
+                    <div className="p-2.5 bg-[#F5EDE4]">
+                      <p className="text-xs text-[#4A6670]/60 line-clamp-1">{city.duration}</p>
                     </div>
                   </button>
                 ))}

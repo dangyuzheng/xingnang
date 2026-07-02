@@ -64,7 +64,7 @@ export function getCurrentSeason(): string {
 
 /** 获取当月推荐城市（稳定排序，避免 hydration 不一致） */
 export function getMonthlyRecommendations(season: string, count: number = 3): CityGuide[] {
-  const suitable = allCities.filter((c) => c.seasons.includes(season as import("./types").SeasonTag));
+  const suitable = allCities.filter((c) => c.seasons && c.seasons.includes(season as import("./types").SeasonTag));
   return suitable.slice(0, count);
 }
 
@@ -79,16 +79,16 @@ export function filterCities(filters: {
   let result = [...allCities];
 
   if (filters.destTypes?.length) {
-    result = result.filter((c) => c.destTypes.some((t) => filters.destTypes!.includes(t)));
+    result = result.filter((c) => c.destTypes && c.destTypes.some((t) => filters.destTypes!.includes(t)));
   }
   if (filters.durationRange?.length) {
-    result = result.filter((c) => filters.durationRange!.includes(c.durationRange));
+    result = result.filter((c) => c.durationRange && filters.durationRange!.includes(c.durationRange));
   }
   if (filters.budgetRange?.length) {
-    result = result.filter((c) => filters.budgetRange!.includes(c.budgetRange));
+    result = result.filter((c) => c.budgetRange && filters.budgetRange!.includes(c.budgetRange));
   }
   if (filters.seasons?.length) {
-    result = result.filter((c) => c.seasons.some((s) => filters.seasons!.includes(s)));
+    result = result.filter((c) => c.seasons && c.seasons.some((s) => filters.seasons!.includes(s)));
   }
   if (filters.excludeVisited && filters.excludeVisited.length > 0) {
     result = result.filter((c) => !filters.excludeVisited!.includes(c.id));
