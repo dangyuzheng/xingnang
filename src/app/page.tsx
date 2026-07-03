@@ -141,18 +141,29 @@ export default function HomePage() {
                 <span className="text-sm text-[#4A6670]">本月最佳</span>
                 <span className="text-xs text-[#4A6670]/40">{mounted ? seasonLabels[currentSeason] : ""}</span>
               </div>
-              <div className="grid grid-cols-3 gap-3 px-3">
+              <div className="grid grid-cols-1 gap-3 px-3">
                 {monthlyRecs.slice(0, 3).map((city) => (
                   <button
                     key={city.id}
                     onClick={() => { setShowMenu(false); router.push(`/city/${city.id}`); }}
-                    className="flex flex-col rounded-xl overflow-hidden hover:shadow-md transition-shadow text-left"
+                    className="flex flex-col rounded-xl overflow-hidden hover:shadow-md transition-all hover:scale-[1.02] text-left bg-white border border-[#C8956C]/10"
                   >
-                    <div className={`w-full aspect-[4/1] bg-gradient-to-br ${city.gradient} flex items-end p-2`}>
-                      <span className="text-white font-bold text-sm drop-shadow-md">{city.name}</span>
+                    <div className={`w-full h-24 bg-gradient-to-br ${city.gradient} flex items-end p-3 relative`}>
+                      <div className="absolute top-2 right-2 bg-white/20 backdrop-blur-sm rounded-full px-2 py-0.5">
+                        <span className="text-white text-xs font-medium">{city.duration}</span>
+                      </div>
+                      <div>
+                        <h3 className="text-white font-bold text-lg drop-shadow-md">{city.name}</h3>
+                        <p className="text-white/90 text-xs mt-0.5">{city.province}</p>
+                      </div>
                     </div>
-                    <div className="w-full p-2.5 bg-[#F5EDE4]">
-                      <p className="text-sm text-[#4A6670]/60 line-clamp-1">{city.duration}</p>
+                    <div className="w-full p-3 bg-white">
+                      <p className="text-xs text-[#4A6670]/70 line-clamp-2 mb-2">{city.tagline}</p>
+                      <div className="flex items-center gap-2 text-xs">
+                        <span className="text-[#C8956C] font-medium">{city.bestTime}</span>
+                        <span className="text-[#4A6670]/30">|</span>
+                        <span className="text-[#4A6670]/60">人均 {city.budget}</span>
+                      </div>
                     </div>
                   </button>
                 ))}
@@ -225,16 +236,9 @@ export default function HomePage() {
 
           {/* 盲盒动画阶段 */}
           {blindboxPhase === "shaking" && (
-            <div className="w-full py-5 bg-gradient-to-r from-[#C8956C] to-[#A67B5B] text-white rounded-2xl font-bold text-lg shadow-[0_20px_40px_-10px_rgba(200,149,108,0.5)] animate-blindbox-shake">
-              <span className="flex items-center justify-center gap-2">
-                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v3" />
-                  <path d="M3 8h18v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8z" />
-                  <path d="M12 8v13" />
-                  <path d="M8 12h8" />
-                </svg>
-                正在开启...
-              </span>
+            <div className="w-full flex flex-col items-center justify-center py-8 animate-blindbox-shake">
+              <img src="/manghe.gif" alt="盲盒开启" className="w-48 h-48 object-contain mb-4" />
+              <p className="text-lg font-bold text-[#4A6670]">正在开启盲盒...</p>
             </div>
           )}
 
