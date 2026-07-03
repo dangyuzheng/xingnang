@@ -689,4 +689,5 @@ export const newCities: CityGuide[] = [
       { name: "充电宝", category: "electronics", required: true },
     ],
   },
+  
 ];
