@@ -404,7 +404,7 @@ export const nicheCities: CityGuide[] = [
     tagline: "中越边境山水画廊",
     gradient: "from-emerald-400 via-teal-200 to-cyan-100",
     isNiche: true,
-    destTypes: ["nature", "nature", "ancient_city"],
+    destTypes: ["nature", "ancient_city"],
     durationRange: "4-7d",
     budgetRange: "budget",
     seasons: ["spring", "summer", "autumn"],
