@@ -260,7 +260,7 @@ export default function CityDetailPage({ params }: { params: Promise<{ id: strin
       <div className="mx-4 mt-8">
         <h2 className="text-base font-bold text-[#4A6670] mb-1 flex items-center gap-2">
           <Calendar className="w-4 h-4 text-[#C8956C]" />
-          {city.duration}懒人行程 直接抄作业
+          {city.duration}省心行程
         </h2>
         <div className="flex gap-2 mt-3 mb-4">
           <button
@@ -269,7 +269,7 @@ export default function CityDetailPage({ params }: { params: Promise<{ id: strin
               itineraryMode === "easy" ? "bg-[#C8956C] text-white" : "bg-[#F5EDE4] text-[#4A6670]"
             }`}
           >
-            轻松版
+            松弛慢游版
           </button>
           <button
             onClick={() => setItineraryMode("intense")}
@@ -277,7 +277,7 @@ export default function CityDetailPage({ params }: { params: Promise<{ id: strin
               itineraryMode === "intense" ? "bg-[#C8956C] text-white" : "bg-[#F5EDE4] text-[#4A6670]"
             }`}
           >
-            暴走版
+            深度暴走版
           </button>
         </div>
         <ItineraryView city={city} mode={itineraryMode} />
