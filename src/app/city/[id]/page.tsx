@@ -4,6 +4,7 @@ import { useState, use } from "react";
 import { useRouter } from "next/navigation";
 import { getCityById, packingCategoryLabels } from "@/lib/data-index";
 import { useFavorites } from "@/hooks/use-favorites";
+import { tailwindGradientToCSS } from "@/lib/utils";
 import type { CityGuide } from "@/lib/types";
 import {
   ArrowLeft,
@@ -123,7 +124,7 @@ export default function CityDetailPage({ params }: { params: Promise<{ id: strin
   return (
     <div className="min-h-screen bg-[#FAF7F2] pb-24">
       {/* 顶部头图信息卡 */}
-      <div className={`relative bg-gradient-to-br ${city.gradient} pt-12 pb-8 px-4`}>
+      <div className="relative pt-12 pb-8 px-4" style={{ background: tailwindGradientToCSS(city.gradient) }}>
         <div className="absolute inset-0 bg-black/10" />
         {/* 导航 */}
         <div className="relative flex items-center justify-between mb-8">
