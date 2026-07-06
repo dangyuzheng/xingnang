@@ -121,15 +121,111 @@ export default function CityDetailPage({ params }: { params: Promise<{ id: strin
   const budget = budgetCalc();
 
   // 转换渐变字符串为内联样式（解决 Safari 兼容性问题）
+  // Convert Tailwind gradient classes to inline CSS for Safari compatibility
   const getGradientStyle = (gradient: string) => {
-    const colors = gradient
-      .replace(/from-\[#([0-9A-Fa-f]{6})\]/g, '#$1')
-      .replace(/via-\[#([0-9A-Fa-f]{6})\]/g, '#$1')
-      .replace(/to-\[#([0-9A-Fa-f]{6})\]/g, '#$1')
-      .match(/#[0-9A-Fa-f]{6}/g) || [];
+    const colorMap: Record<string, string> = {
+      // 100 variants
+      'from-amber-100': '#fef3c7', 'from-blue-100': '#dbeafe', 'from-cyan-100': '#cffafe',
+      'from-emerald-100': '#d1fae5', 'from-green-100': '#dcfce7', 'from-indigo-100': '#e0e7ff',
+      'from-orange-100': '#ffedd5', 'from-pink-100': '#fce7f3', 'from-purple-100': '#f3e8ff',
+      'from-red-100': '#fee2e2', 'from-rose-100': '#ffe4e6', 'from-sky-100': '#e0f2fe',
+      'from-teal-100': '#ccfbf1', 'from-violet-100': '#ede9fe', 'from-yellow-100': '#fef9c3',
+      'via-amber-100': '#fef3c7', 'via-blue-100': '#dbeafe', 'via-cyan-100': '#cffafe',
+      'via-emerald-100': '#d1fae5', 'via-green-100': '#dcfce7', 'via-indigo-100': '#e0e7ff',
+      'via-orange-100': '#ffedd5', 'via-pink-100': '#fce7f3', 'via-purple-100': '#f3e8ff',
+      'via-red-100': '#fee2e2', 'via-rose-100': '#ffe4e6', 'via-sky-100': '#e0f2fe',
+      'via-teal-100': '#ccfbf1', 'via-violet-100': '#ede9fe', 'via-yellow-100': '#fef9c3',
+      'to-amber-100': '#fef3c7', 'to-blue-100': '#dbeafe', 'to-cyan-100': '#cffafe',
+      'to-emerald-100': '#d1fae5', 'to-green-100': '#dcfce7', 'to-indigo-100': '#e0e7ff',
+      'to-orange-100': '#ffedd5', 'to-pink-100': '#fce7f3', 'to-purple-100': '#f3e8ff',
+      'to-red-100': '#fee2e2', 'to-rose-100': '#ffe4e6', 'to-sky-100': '#e0f2fe',
+      'to-teal-100': '#ccfbf1', 'to-violet-100': '#ede9fe', 'to-yellow-100': '#fef9c3',
+      // 200 variants
+      'from-amber-200': '#fde68a', 'from-blue-200': '#bfdbfe', 'from-cyan-200': '#a5f3fc',
+      'from-emerald-200': '#a7f3d0', 'from-green-200': '#bbf7d0', 'from-indigo-200': '#c7d2fe',
+      'from-orange-200': '#fed7aa', 'from-pink-200': '#fbcfe8', 'from-purple-200': '#e9d5ff',
+      'from-red-200': '#fecaca', 'from-rose-200': '#fecdd3', 'from-sky-200': '#bae6fd',
+      'from-teal-200': '#99f6e4', 'from-violet-200': '#ddd6fe', 'from-yellow-200': '#fef08a',
+      'from-gray-200': '#e5e7eb', 'from-slate-200': '#e2e8f0', 'from-zinc-200': '#e4e4e7',
+      'from-fuchsia-200': '#f5d0fe',
+      'via-amber-200': '#fde68a', 'via-blue-200': '#bfdbfe', 'via-cyan-200': '#a5f3fc',
+      'via-emerald-200': '#a7f3d0', 'via-green-200': '#bbf7d0', 'via-indigo-200': '#c7d2fe',
+      'via-orange-200': '#fed7aa', 'via-pink-200': '#fbcfe8', 'via-purple-200': '#e9d5ff',
+      'via-red-200': '#fecaca', 'via-rose-200': '#fecdd3', 'via-sky-200': '#bae6fd',
+      'via-teal-200': '#99f6e4', 'via-violet-200': '#ddd6fe', 'via-yellow-200': '#fef08a',
+      'via-gray-200': '#e5e7eb', 'via-slate-200': '#e2e8f0', 'via-zinc-200': '#e4e4e7',
+      'via-fuchsia-200': '#f5d0fe',
+      'to-amber-200': '#fde68a', 'to-blue-200': '#bfdbfe', 'to-cyan-200': '#a5f3fc',
+      'to-emerald-200': '#a7f3d0', 'to-green-200': '#bbf7d0', 'to-indigo-200': '#c7d2fe',
+      'to-orange-200': '#fed7aa', 'to-pink-200': '#fbcfe8', 'to-purple-200': '#e9d5ff',
+      'to-red-200': '#fecaca', 'to-rose-200': '#fecdd3', 'to-sky-200': '#bae6fd',
+      'to-teal-200': '#99f6e4', 'to-violet-200': '#ddd6fe', 'to-yellow-200': '#fef08a',
+      'to-gray-200': '#e5e7eb', 'to-slate-200': '#e2e8f0', 'to-zinc-200': '#e4e4e7',
+      'to-fuchsia-200': '#f5d0fe',
+      // 300 variants
+      'from-amber-300': '#fcd34d', 'from-blue-300': '#93c5fd', 'from-cyan-300': '#67e8f9',
+      'from-emerald-300': '#6ee7b7', 'from-green-300': '#86efac', 'from-indigo-300': '#a5b4fc',
+      'from-orange-300': '#fdba74', 'from-pink-300': '#f9a8d4', 'from-purple-300': '#d8b4fe',
+      'from-red-300': '#fca5a5', 'from-rose-300': '#fda4af', 'from-sky-300': '#7dd3fc',
+      'from-teal-300': '#5eead4', 'from-violet-300': '#c4b5fd', 'from-yellow-300': '#fde047',
+      'from-gray-300': '#d1d5db', 'from-slate-300': '#cbd5e1', 'from-zinc-300': '#d4d4d8',
+      'from-fuchsia-300': '#e879f9',
+      'via-amber-300': '#fcd34d', 'via-blue-300': '#93c5fd', 'via-cyan-300': '#67e8f9',
+      'via-emerald-300': '#6ee7b7', 'via-green-300': '#86efac', 'via-indigo-300': '#a5b4fc',
+      'via-orange-300': '#fdba74', 'via-pink-300': '#f9a8d4', 'via-purple-300': '#d8b4fe',
+      'via-red-300': '#fca5a5', 'via-rose-300': '#fda4af', 'via-sky-300': '#7dd3fc',
+      'via-teal-300': '#5eead4', 'via-violet-300': '#c4b5fd', 'via-yellow-300': '#fde047',
+      'via-gray-300': '#d1d5db', 'via-slate-300': '#cbd5e1', 'via-zinc-300': '#d4d4d8',
+      'via-fuchsia-300': '#e879f9',
+      'to-amber-300': '#fcd34d', 'to-blue-300': '#93c5fd', 'to-cyan-300': '#67e8f9',
+      'to-emerald-300': '#6ee7b7', 'to-green-300': '#86efac', 'to-indigo-300': '#a5b4fc',
+      'to-orange-300': '#fdba74', 'to-pink-300': '#f9a8d4', 'to-purple-300': '#d8b4fe',
+      'to-red-300': '#fca5a5', 'to-rose-300': '#fda4af', 'to-sky-300': '#7dd3fc',
+      'to-teal-300': '#5eead4', 'to-violet-300': '#c4b5fd', 'to-yellow-300': '#fde047',
+      'to-gray-300': '#d1d5db', 'to-slate-300': '#cbd5e1', 'to-zinc-300': '#d4d4d8',
+      'to-fuchsia-300': '#e879f9',
+      // 400 variants
+      'from-amber-400': '#fbbf24', 'from-blue-400': '#60a5fa', 'from-cyan-400': '#22d3ee',
+      'from-emerald-400': '#34d399', 'from-green-400': '#4ade80', 'from-indigo-400': '#818cf8',
+      'from-orange-400': '#fb923c', 'from-pink-400': '#f472b6', 'from-purple-400': '#c084fc',
+      'from-red-400': '#f87171', 'from-rose-400': '#fb7185', 'from-sky-400': '#38bdf8',
+      'from-teal-400': '#2dd4bf', 'from-violet-400': '#a78bfa', 'from-yellow-400': '#facc15',
+      'via-amber-400': '#fbbf24', 'via-blue-400': '#60a5fa', 'via-cyan-400': '#22d3ee',
+      'via-emerald-400': '#34d399', 'via-green-400': '#4ade80', 'via-indigo-400': '#818cf8',
+      'via-orange-400': '#fb923c', 'via-pink-400': '#f472b6', 'via-purple-400': '#c084fc',
+      'via-red-400': '#f87171', 'via-rose-400': '#fb7185', 'via-sky-400': '#38bdf8',
+      'via-teal-400': '#2dd4bf', 'via-violet-400': '#a78bfa', 'via-yellow-400': '#facc15',
+      'to-amber-400': '#fbbf24', 'to-blue-400': '#60a5fa', 'to-cyan-400': '#22d3ee',
+      'to-emerald-400': '#34d399', 'to-green-400': '#4ade80', 'to-indigo-400': '#818cf8',
+      'to-orange-400': '#fb923c', 'to-pink-400': '#f472b6', 'to-purple-400': '#c084fc',
+      'to-red-400': '#f87171', 'to-rose-400': '#fb7185', 'to-sky-400': '#38bdf8',
+      'to-teal-400': '#2dd4bf', 'to-violet-400': '#a78bfa', 'to-yellow-400': '#facc15',
+      // 500 variants
+      'from-amber-500': '#f59e0b', 'from-blue-500': '#3b82f6', 'from-cyan-500': '#06b6d4',
+      'from-emerald-500': '#10b981', 'from-green-500': '#22c55e', 'from-indigo-500': '#6366f1',
+      'from-orange-500': '#f97316', 'from-pink-500': '#ec4899', 'from-purple-500': '#a855f7',
+      'from-red-500': '#ef4444', 'from-rose-500': '#f43f5e', 'from-sky-500': '#0ea5e9',
+      'from-teal-500': '#14b8a6', 'from-violet-500': '#8b5cf6', 'from-yellow-500': '#eab308',
+      'via-amber-500': '#f59e0b', 'via-blue-500': '#3b82f6', 'via-cyan-500': '#06b6d4',
+      'via-emerald-500': '#10b981', 'via-green-500': '#22c55e', 'via-indigo-500': '#6366f1',
+      'via-orange-500': '#f97316', 'via-pink-500': '#ec4899', 'via-purple-500': '#a855f7',
+      'via-red-500': '#ef4444', 'via-rose-500': '#f43f5e', 'via-sky-500': '#0ea5e9',
+      'via-teal-500': '#14b8a6', 'via-violet-500': '#8b5cf6', 'via-yellow-500': '#eab308',
+      'to-amber-500': '#f59e0b', 'to-blue-500': '#3b82f6', 'to-cyan-500': '#06b6d4',
+      'to-emerald-500': '#10b981', 'to-green-500': '#22c55e', 'to-indigo-500': '#6366f1',
+      'to-orange-500': '#f97316', 'to-pink-500': '#ec4899', 'to-purple-500': '#a855f7',
+      'to-red-500': '#ef4444', 'to-rose-500': '#f43f5e', 'to-sky-500': '#0ea5e9',
+      'to-teal-500': '#14b8a6', 'to-violet-500': '#8b5cf6', 'to-yellow-500': '#eab308',
+      // Special colors
+      'from-white': '#ffffff', 'via-white': '#ffffff', 'to-white': '#ffffff',
+    };
+
+    const parts = gradient.split(' ');
+    const colors = parts.map(p => colorMap[p]).filter(Boolean);
+
     if (colors.length === 2) {
       return { backgroundImage: `linear-gradient(to bottom right, ${colors[0]}, ${colors[1]})` };
-    } else if (colors.length === 3) {
+    } else if (colors.length >= 3) {
       return { backgroundImage: `linear-gradient(to bottom right, ${colors[0]}, ${colors[1]}, ${colors[2]})` };
     }
     return { backgroundImage: `linear-gradient(to bottom right, #C8956C, #A67B5B)` };
