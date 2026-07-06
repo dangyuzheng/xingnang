@@ -14,7 +14,6 @@ import {
   seasonLabels,
 } from "@/lib/data-index";
 import { useFavorites } from "@/hooks/use-favorites";
-import { tailwindGradientToCSS } from "@/lib/utils";
 import {
   MapPin,
   Mountain,
@@ -142,29 +141,18 @@ export default function HomePage() {
                 <span className="text-sm text-[#4A6670]">本月最佳</span>
                 <span className="text-xs text-[#4A6670]/40">{mounted ? seasonLabels[currentSeason] : ""}</span>
               </div>
-              <div className="grid grid-cols-1 gap-3 px-3">
+              <div className="grid grid-cols-3 gap-3 px-3">
                 {monthlyRecs.slice(0, 3).map((city) => (
                   <button
                     key={city.id}
                     onClick={() => { setShowMenu(false); router.push(`/city/${city.id}`); }}
-                    className="flex flex-col rounded-xl overflow-hidden hover:shadow-md transition-all hover:scale-[1.02] text-left bg-white border border-[#C8956C]/10"
+                    className="flex flex-col rounded-xl overflow-hidden hover:shadow-md transition-shadow text-left"
                   >
-                    <div className="w-full h-24 flex items-end p-3 relative" style={{ background: tailwindGradientToCSS(city.gradient) }}>
-                      <div className="absolute top-2 right-2 bg-white/20 backdrop-blur-sm rounded-full px-2 py-0.5">
-                        <span className="text-white text-xs font-medium">{city.duration}</span>
-                      </div>
-                      <div>
-                        <h3 className="text-white font-bold text-lg drop-shadow-md">{city.name}</h3>
-                        <p className="text-white/90 text-xs mt-0.5">{city.province}</p>
-                      </div>
+                    <div className={`w-full aspect-[4/1] bg-gradient-to-br ${city.gradient} flex items-end p-2`}>
+                      <span className="text-white font-bold text-sm drop-shadow-md">{city.name}</span>
                     </div>
-                    <div className="w-full p-3 bg-white">
-                      <p className="text-xs text-[#4A6670]/70 line-clamp-2 mb-2">{city.tagline}</p>
-                      <div className="flex items-center gap-2 text-xs">
-                        <span className="text-[#C8956C] font-medium">{city.bestTime}</span>
-                        <span className="text-[#4A6670]/30">|</span>
-                        <span className="text-[#4A6670]/60">人均 {city.budget}</span>
-                      </div>
+                    <div className="w-full p-2.5 bg-[#F5EDE4]">
+                      <p className="text-sm text-[#4A6670]/60 line-clamp-1">{city.duration}</p>
                     </div>
                   </button>
                 ))}
