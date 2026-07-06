@@ -94,6 +94,61 @@ export default function HomePage() {
     
   }, [selectedDestTypes, selectedDuration, selectedBudget, visitedCityIds, router]);
 
+  // Convert Tailwind gradient classes to inline CSS for Safari compatibility
+  const getGradientStyle = (gradient: string) => {
+    const colorMap: Record<string, string> = {
+      'from-blue-400': '#60a5fa', 'from-blue-500': '#3b82f6',
+      'from-cyan-400': '#22d3ee', 'from-cyan-500': '#06b6d4',
+      'from-emerald-400': '#34d399', 'from-emerald-500': '#10b981',
+      'from-green-400': '#4ade80', 'from-green-500': '#22c55e',
+      'from-orange-400': '#fb923c', 'from-orange-500': '#f97316',
+      'from-pink-400': '#f472b6', 'from-pink-500': '#ec4899',
+      'from-purple-400': '#c084fc', 'from-purple-500': '#a855f7',
+      'from-red-400': '#f87171', 'from-red-500': '#ef4444',
+      'from-rose-400': '#fb7185', 'from-rose-500': '#f43f5e',
+      'from-sky-400': '#38bdf8', 'from-sky-500': '#0ea5e9',
+      'from-teal-400': '#2dd4bf', 'from-teal-500': '#14b8a6',
+      'from-violet-400': '#a78bfa', 'from-violet-500': '#8b5cf6',
+      'from-yellow-400': '#facc15', 'from-yellow-500': '#eab308',
+      'via-blue-400': '#60a5fa', 'via-blue-500': '#3b82f6',
+      'via-cyan-400': '#22d3ee', 'via-cyan-500': '#06b6d4',
+      'via-emerald-400': '#34d399', 'via-emerald-500': '#10b981',
+      'via-green-400': '#4ade80', 'via-green-500': '#22c55e',
+      'via-orange-400': '#fb923c', 'via-orange-500': '#f97316',
+      'via-pink-400': '#f472b6', 'via-pink-500': '#ec4899',
+      'via-purple-400': '#c084fc', 'via-purple-500': '#a855f7',
+      'via-red-400': '#f87171', 'via-red-500': '#ef4444',
+      'via-rose-400': '#fb7185', 'via-rose-500': '#f43f5e',
+      'via-sky-400': '#38bdf8', 'via-sky-500': '#0ea5e9',
+      'via-teal-400': '#2dd4bf', 'via-teal-500': '#14b8a6',
+      'via-violet-400': '#a78bfa', 'via-violet-500': '#8b5cf6',
+      'via-yellow-400': '#facc15', 'via-yellow-500': '#eab308',
+      'to-blue-400': '#60a5fa', 'to-blue-500': '#3b82f6',
+      'to-cyan-400': '#22d3ee', 'to-cyan-500': '#06b6d4',
+      'to-emerald-400': '#34d399', 'to-emerald-500': '#10b981',
+      'to-green-400': '#4ade80', 'to-green-500': '#22c55e',
+      'to-orange-400': '#fb923c', 'to-orange-500': '#f97316',
+      'to-pink-400': '#f472b6', 'to-pink-500': '#ec4899',
+      'to-purple-400': '#c084fc', 'to-purple-500': '#a855f7',
+      'to-red-400': '#f87171', 'to-red-500': '#ef4444',
+      'to-rose-400': '#fb7185', 'to-rose-500': '#f43f5e',
+      'to-sky-400': '#38bdf8', 'to-sky-500': '#0ea5e9',
+      'to-teal-400': '#2dd4bf', 'to-teal-500': '#14b8a6',
+      'to-violet-400': '#a78bfa', 'to-violet-500': '#8b5cf6',
+      'to-yellow-400': '#facc15', 'to-yellow-500': '#eab308',
+    };
+    
+    const parts = gradient.split(' ');
+    const colors = parts.map(p => colorMap[p] || p).filter(c => c.startsWith('#'));
+    
+    if (colors.length === 2) {
+      return { background: `linear-gradient(to bottom right, ${colors[0]}, ${colors[1]})` };
+    } else if (colors.length === 3) {
+      return { background: `linear-gradient(to bottom right, ${colors[0]}, ${colors[1]}, ${colors[2]})` };
+    }
+    return { background: `linear-gradient(to bottom right, #C8956C, #A67B5B)` };
+  };
+
   const totalFavorites = lists.reduce((sum, l) => sum + l.cityIds.length, 0);
 
   return (
@@ -102,7 +157,7 @@ export default function HomePage() {
       <nav className="sticky top-0 z-50 bg-[#FAF7F2]/90 backdrop-blur-md">
         <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#C8956C] to-[#A67B5B] flex items-center justify-center shadow-sm">
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm" style={{ background: 'linear-gradient(to bottom right, #C8956C, #A67B5B)' }}>
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" /></svg>
             </div>
             <span className="font-bold text-[#4A6670] text-lg tracking-wide">行囊</span>
@@ -148,7 +203,7 @@ export default function HomePage() {
                     onClick={() => { setShowMenu(false); router.push(`/city/${city.id}`); }}
                     className="flex flex-col rounded-xl overflow-hidden hover:shadow-md transition-shadow text-left"
                   >
-                    <div className={`w-full aspect-[4/1] bg-gradient-to-br ${city.gradient} flex items-end p-2`}>
+                    <div className="w-full aspect-[4/1] flex items-end p-2" style={getGradientStyle(city.gradient)}>
                       <span className="text-white font-bold text-sm drop-shadow-md">{city.name}</span>
                     </div>
                     <div className="w-full p-2.5 bg-[#F5EDE4]">
@@ -209,7 +264,8 @@ export default function HomePage() {
           {blindboxPhase === "idle" && (
             <button
               onClick={handleExplore}
-              className="w-full py-5 bg-gradient-to-r from-[#C8956C] to-[#A67B5B] text-white rounded-2xl font-bold text-lg shadow-[0_20px_40px_-10px_rgba(200,149,108,0.5)] hover:shadow-[0_25px_50px_-10px_rgba(200,149,108,0.6)] active:scale-[0.98] transition-all animate-breathe"
+              className="w-full py-5 text-white rounded-2xl font-bold text-lg shadow-[0_20px_40px_-10px_rgba(200,149,108,0.5)] hover:shadow-[0_25px_50px_-10px_rgba(200,149,108,0.6)] active:scale-[0.98] transition-all animate-breathe"
+              style={{ background: 'linear-gradient(to right, #C8956C, #A67B5B)' }}
             >
               <span className="flex items-center justify-center gap-2">
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

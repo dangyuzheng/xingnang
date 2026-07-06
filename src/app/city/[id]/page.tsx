@@ -120,10 +120,25 @@ export default function CityDetailPage({ params }: { params: Promise<{ id: strin
 
   const budget = budgetCalc();
 
+  // 转换渐变字符串为内联样式（解决 Safari 兼容性问题）
+  const getGradientStyle = (gradient: string) => {
+    const colors = gradient
+      .replace(/from-\[#([0-9A-Fa-f]{6})\]/g, '#$1')
+      .replace(/via-\[#([0-9A-Fa-f]{6})\]/g, '#$1')
+      .replace(/to-\[#([0-9A-Fa-f]{6})\]/g, '#$1')
+      .match(/#[0-9A-Fa-f]{6}/g) || [];
+    if (colors.length === 2) {
+      return { backgroundImage: `linear-gradient(to bottom right, ${colors[0]}, ${colors[1]})` };
+    } else if (colors.length === 3) {
+      return { backgroundImage: `linear-gradient(to bottom right, ${colors[0]}, ${colors[1]}, ${colors[2]})` };
+    }
+    return { backgroundImage: `linear-gradient(to bottom right, #C8956C, #A67B5B)` };
+  };
+
   return (
     <div className="min-h-screen bg-[#FAF7F2] pb-24">
       {/* 顶部头图信息卡 */}
-      <div className={`relative bg-gradient-to-br ${city.gradient} pt-12 pb-8 px-4`}>
+      <div className="relative pt-12 pb-8 px-4" style={getGradientStyle(city.gradient)}>
         <div className="absolute inset-0 bg-black/10" />
         {/* 导航 */}
         <div className="relative flex items-center justify-between mb-8">
