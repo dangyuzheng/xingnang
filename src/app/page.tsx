@@ -256,7 +256,7 @@ export default function HomePage() {
                   <button
                     key={city.id}
                     onClick={() => { setShowMenu(false); router.push(`/city/${city.id}`); }}
-                    className="flex flex-col rounded-2xl overflow-hidden liquid-glass transition-all duration-300 hover:scale-105 hover:liquid-glow text-left group"
+                    className="shadow  flex flex-col rounded-2xl overflow-hidden liquid-glass transition-all duration-300 hover:scale-105 hover:liquid-glow text-left group"
                   >
                     <div className="w-full aspect-[4/1] flex items-end p-2 relative" style={getGradientStyle(city.gradient)}>
                       <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
