@@ -314,7 +314,7 @@ export default function HomePage() {
       )}
 
       {/* 主内容区 - 极致居中 */}
-      <main className="flex flex-col items-center justify-center min-h-[calc(100vh-3.5rem)] px-4">
+      <main className="flex flex-col items-center justify-center min-h-[calc(100vh-7.5rem)] px-4">
         <div className="w-full max-w-md text-center">
           {/* 标题区 */}
           <h1 className="text-2xl font-bold text-[#4A6670] mb-2">把下一站，交给惊喜</h1>
