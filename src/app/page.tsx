@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import {
   allCities,
   filterCities,
@@ -231,8 +232,9 @@ export default function HomePage() {
         <div className="fixed inset-x-0 top-14 z-40 bg-white/95 backdrop-blur-md border-b border-[#C8956C]/10 shadow-lg animate-fade-in">
           <div className="max-w-2xl mx-auto px-4 py-4 space-y-4">
             {/* 收藏 */}
-            <button
-              onClick={() => { setShowMenu(false); router.push("/favorites"); }}
+            <Link
+              href="/favorites"
+              onClick={() => setShowMenu(false)}
               className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-[#F5EDE4] transition-colors text-left"
             >
               <Heart className="w-5 h-5 text-[#C8956C]" />
@@ -242,7 +244,7 @@ export default function HomePage() {
                   {totalFavorites}
                 </span>
               )}
-            </button>
+            </Link>
 
             {/* 本月最佳 */}
             <div className="border-t border-[#C8956C]/10 pt-3">
@@ -253,9 +255,10 @@ export default function HomePage() {
               </div>
               <div className="grid grid-cols-3 gap-3 px-3">
                 {monthlyRecs.slice(0, 3).map((city) => (
-                  <button
+                  <Link
                     key={city.id}
-                    onClick={() => { setShowMenu(false); router.push(`/city/${city.id}`); }}
+                    href={`/city/${city.id}`}
+                    onClick={() => setShowMenu(false)}
                     className="shadow  flex flex-col rounded-2xl overflow-hidden liquid-glass transition-all duration-300 hover:scale-105 hover:liquid-glow text-left group"
                   >
                     <div className="w-full aspect-[4/1] flex items-end p-2 relative" style={getGradientStyle(city.gradient)}>
@@ -265,15 +268,16 @@ export default function HomePage() {
                     <div className="w-full p-2.5 bg-white/60 backdrop-blur-sm">
                       <p className="text-xs text-[#4A6670]/70 line-clamp-1">{city.duration}</p>
                     </div>
-                  </button>
+                  </Link>
                 ))}
               </div>
             </div>
 
             {/* 快捷入口 */}
             <div className="border-t border-[#C8956C]/10 pt-3 space-y-1">
-              <button
-                onClick={() => { setShowMenu(false); router.push("/nearby"); }}
+              <Link
+                href="/nearby"
+                onClick={() => setShowMenu(false)}
                 className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-[#F5EDE4] transition-colors text-left"
               >
                 <MapPin className="w-5 h-5 text-green-500" />
@@ -281,9 +285,10 @@ export default function HomePage() {
                   <p className="text-sm text-[#4A6670]">周边短途</p>
                   <p className="text-xs text-[#4A6670]/40">2小时可达的周末目的地</p>
                 </div>
-              </button>
-              <button
-                onClick={() => { setShowMenu(false); router.push("/niche"); }}
+              </Link>
+              <Link
+                href="/niche"
+                onClick={() => setShowMenu(false)}
                 className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-[#F5EDE4] transition-colors text-left"
               >
                 <Star className="w-5 h-5 text-purple-500" />
@@ -291,9 +296,10 @@ export default function HomePage() {
                   <p className="text-sm text-[#4A6670]">小众秘境</p>
                   <p className="text-xs text-[#4A6670]/40">{nicheCitiesList.length}个宝藏地</p>
                 </div>
-              </button>
-              <button
-                onClick={() => { setShowMenu(false); router.push("/holiday"); }}
+              </Link>
+              <Link
+                href="/holiday"
+                onClick={() => setShowMenu(false)}
                 className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-[#F5EDE4] transition-colors text-left"
               >
                 <Shield className="w-5 h-5 text-amber-500" />
@@ -301,7 +307,7 @@ export default function HomePage() {
                   <p className="text-sm text-[#4A6670]">节假日避坑</p>
                   <p className="text-xs text-[#4A6670]/40">预警 + Plan B</p>
                 </div>
-              </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -434,7 +440,7 @@ export default function HomePage() {
       </main>
 
       {/* 底部极浅辅助信息 */}
-      <footer className="fixed bottom-0 inset-x-0 pb-4 text-center pointer-events-none">
+      <footer className="mt-8 pb-4 text-center">
         <p className="text-[10px] text-[#4A6670]/20">已收录 {allCities?.length * 2}+ 目的地与原创攻略</p>
       </footer>
     </div>
