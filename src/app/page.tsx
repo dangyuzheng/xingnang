@@ -326,7 +326,7 @@ export default function HomePage() {
           {blindboxPhase === "idle" && (
             <button
               onClick={handleExplore}
-              className="w-full py-5 text-white rounded-3xl font-bold text-lg crystal-depth-2 crystal-shine hover:crystal-depth-3 active:scale-[0.98] transition-all animate-breathe crystal-liquid"
+              className="w-full py-5 text-white rounded-3xl font-bold text-lg glass-button-primary hover:glass-glow active:scale-[0.98] transition-all animate-breathe"
               style={{ background: 'linear-gradient(135deg, #C8956C 0%, #A67B5B 50%, #8B6548 100%)' }}
             >
               <span className="flex items-center justify-center gap-2">
@@ -344,7 +344,7 @@ export default function HomePage() {
           {/* 盲盒动画阶段 */}
           {blindboxPhase === "shaking" && (
             <div className="w-full flex flex-col items-center justify-center py-8">
-              <img src="/manghe.gif" alt="盲盒开启" className="w-48 h-48 object-contain mb-4 animate-crystal-float" />
+              <img src="/manghe.gif" alt="盲盒开启" className="w-48 h-48 object-contain mb-4 animate-glass-float" />
               <p className="text-lg font-bold text-[#4A6670] animate-blindbox-shake">正在开启盲盒...</p>
             </div>
           )}
@@ -353,7 +353,7 @@ export default function HomePage() {
           {/* 偏好筛选 - 按钮下方小字 */}
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="mt-6 text-xs text-[#4A6670]/30 hover:text-[#C8956C] transition-colors crystal-liquid"
+            className="mt-6 text-xs text-[#4A6670]/30 hover:text-[#C8956C] transition-colors"
           >
             {hasFilters ? `已选 ${selectedDestTypes.length + selectedDuration.length + selectedBudget.length} 个偏好 · 展开` : "想限定范围？自定义偏好"}
           </button>
