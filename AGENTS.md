@@ -6,8 +6,8 @@
 
 ### 版本技术栈
 
-- **Framework**: Next.js 16 (App Router)
-- **Core**: React 19
+- **Framework**: React 19 + Vite 8
+- **Routing**: React Router v7
 - **Language**: TypeScript 5
 - **UI 组件**: shadcn/ui (基于 Radix UI)
 - **Styling**: Tailwind CSS 4
@@ -16,18 +16,15 @@
 
 ```
 ├── public/                 # 静态资源
-├── scripts/                # 构建与启动脚本
 ├── src/
-│   ├── app/                # 页面路由与布局
-│   │   ├── api/share/      # 分享内容生成 API
-│   │   ├── city/[id]/      # 目的地详情页（头图+四Tab+懒人行程+工具区）
-│   │   ├── favorites/      # 收藏夹页面（多清单+对比+足迹）
-│   │   ├── holiday/        # 节假日人流预警页面
-│   │   ├── nearby/         # 周边短途推荐页面
-│   │   ├── niche/          # 小众秘境推荐页面
+│   ├── app/                # 页面组件
 │   │   ├── globals.css     # 全局样式 + 自定义动画
-│   │   ├── layout.tsx      # 根布局
-│   │   └── page.tsx        # 首页（偏好筛选+随机推荐+快捷专区）
+│   │   ├── page.tsx        # 首页（偏好筛选+随机推荐+快捷专区）
+│   │   ├── city/[id]/page.tsx    # 目的地详情页（头图+四Tab+懒人行程+工具区）
+│   │   ├── favorites/page.tsx    # 收藏夹页面（多清单+对比+足迹）
+│   │   ├── holiday/page.tsx      # 节假日人流预警页面
+│   │   ├── nearby/page.tsx       # 周边短途推荐页面
+│   │   └── niche/page.tsx        # 小众秘境推荐页面
 │   ├── components/ui/      # Shadcn UI 组件库
 │   ├── hooks/
 │   │   └── use-favorites.ts # 收藏功能 Hook（多清单+想去/去过+对比+足迹）
@@ -37,12 +34,15 @@
 │   │   ├── niche-data.ts   # 小众目的地数据（10+县城/村落）
 │   │   ├── more-data.ts    # 扩展城市数据
 │   │   ├── data-index.ts   # 数据索引（筛选/推荐/季节/周边逻辑）
+│   │   ├── share-utils.ts  # 分享功能工具函数
 │   │   └── utils.ts        # 通用工具函数
-│   └── server.ts           # 自定义服务端入口
+│   └── main.tsx            # 应用入口 + React Router 配置
 ├── DESIGN.md               # 设计规范
-├── next.config.ts
-├── package.json
-└── tsconfig.json
+├── vite.config.ts          # Vite 配置
+├── tsconfig.json           # TypeScript 配置
+├── tsconfig.app.json       # TypeScript 构建配置
+├── index.html              # HTML 入口
+└── package.json
 ```
 
 ## 核心功能
@@ -55,12 +55,22 @@
 6. **季节推荐**：当月最佳目的地 + 随机优先当季
 7. **节假日人流预警**：热门目的地预警 + 替代小众方案
 
-## API 接口
+## 分享功能
 
-### POST /api/share
-生成分享文本内容。
-- 请求体：`{ city, province, guide: { bestTime, duration, pitfalls, funSpots, food, shopping } }`
-- 响应：`{ text: string, shareUrl: string }`
+分享文本生成使用 `src/lib/share-utils.ts` 中的工具函数：
+
+```tsx
+import { generateShareText } from '@/lib/share-utils';
+
+const text = generateShareText(city, province, {
+  bestTime,
+  duration,
+  pitfalls,
+  funSpots,
+  food,
+  shopping,
+});
+```
 
 ## 包管理规范
 
@@ -69,7 +79,10 @@
 ## 开发规范
 
 - TypeScript strict 模式，禁止隐式 any
-- 所有客户端组件使用 `'use client'` 指令
+- 路由使用 React Router v7，配置在 `src/main.tsx`
+- 链接使用 `<Link to="...">` 组件
+- 导航使用 `useNavigate()` Hook
+- 动态路由参数使用 `useParams()` Hook
 - 收藏数据使用 localStorage，通过 `useFavorites` Hook 管理
 - 页面动画使用 CSS keyframes（fade-in, slide-up, slide-in-right）
 - 数据类型定义在 `src/lib/types.ts`，新字段先更新类型再使用

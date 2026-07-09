@@ -38,12 +38,12 @@ const router = createBrowserRouter(
     },
   ],
   {
-    basename: "/xingnang",
-  }
+    basename: "/xingnang/",
+  },
 );
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <RouterProvider router={router} />
-  </StrictMode>
+  </StrictMode>,
 );

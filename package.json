@@ -10,7 +10,8 @@
     "lint": "eslint",
     "lint:build": "eslint . --quiet",
     "ts-check": "tsc -p tsconfig.app.json",
-    "validate": "pnpm run --parallel '/^(ts-check|lint:build)$/'"
+    "validate": "pnpm run --parallel '/^(ts-check|lint:build)$/'",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.958.0",
@@ -83,6 +84,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
+    "gh-pages": "^6.3.0",
     "only-allow": "^1.2.2",
     "react-dev-inspector": "^2.0.1",
     "shadcn": "latest",
