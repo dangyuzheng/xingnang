@@ -1,0 +1,63 @@
+name: Build & Deploy NextJS Pages
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: # 支持手动触发
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 安装pnpm
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      # Node环境
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      # 安装依赖
+      - name: Install deps
+        run: pnpm install
+
+      # Next打包静态文件，输出到 out/
+      - name: Build static export
+        run: pnpm build
+
+      # 解决子路由404：复制index.html为404.html
+      - name: Fix 404 route
+        run: cp out/index.html out/404.html
+
+      # 上传静态产物 out 文件夹
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4
