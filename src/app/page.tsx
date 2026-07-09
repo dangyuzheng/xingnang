@@ -208,50 +208,58 @@ export default function HomePage() {
   const totalFavorites = lists.reduce((sum, l) => sum + l.cityIds.length, 0);
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] relative">
+    <div className="min-h-screen eg-bg relative overflow-hidden">
+      {/* 背景光晕 */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-gradient-to-br from-blue-200/30 to-cyan-200/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-gradient-to-br from-purple-200/20 to-pink-200/10 rounded-full blur-3xl" />
+      </div>
+
       {/* 顶部导航 */}
-      <nav className="sticky top-0 z-50 bg-[#FAF7F2]/90 backdrop-blur-md">
+      <nav className="sticky top-0 z-50 eg-glass border-b border-white/40">
         <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm" style={{ background: 'linear-gradient(to bottom right, #C8956C, #A67B5B)' }}>
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center eg-glass" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.4))' }}>
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" /></svg>
             </div>
-            <span className="font-bold text-[#4A6670] text-lg tracking-wide">行囊</span>
+            <span className="font-semibold text-white/90 text-lg tracking-wide drop-shadow-sm">行囊</span>
           </div>
           <button
             onClick={() => setShowMenu(!showMenu)}
-            className="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-[#C8956C]/10 transition-colors"
+            className="w-9 h-9 flex items-center justify-center rounded-lg eg-glass hover:bg-white/30 transition-colors"
           >
-            {showMenu ? <X className="w-5 h-5 text-[#4A6670]/60" /> : <Menu className="w-5 h-5 text-[#4A6670]/60" />}
+            {showMenu ? <X className="w-5 h-5 text-white/70" /> : <Menu className="w-5 h-5 text-white/70" />}
           </button>
         </div>
       </nav>
 
       {/* 菜单下拉面板 */}
       {showMenu && (
-        <div className="fixed inset-x-0 top-14 z-40 bg-white/95 backdrop-blur-md border-b border-[#C8956C]/10 shadow-lg animate-fade-in">
-          <div className="max-w-2xl mx-auto px-4 py-4 space-y-4">
-            {/* 收藏 */}
-            <Link
-              href="/favorites"
-              onClick={() => setShowMenu(false)}
-              className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-[#F5EDE4] transition-colors text-left"
-            >
-              <Heart className="w-5 h-5 text-[#C8956C]" />
-              <span className="text-sm text-[#4A6670]">我的收藏</span>
-              {totalFavorites > 0 && (
-                <span className="ml-auto bg-[#E8655A] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  {totalFavorites}
-                </span>
-              )}
-            </Link>
+        <div className="fixed inset-x-0 top-14 z-40 animate-fade-in">
+          <div className="max-w-2xl mx-auto px-4 py-3">
+            <div className="eg-panel rounded-2xl p-4 space-y-4">
+              {/* 收藏 */}
+              <Link
+                href="/favorites"
+                onClick={() => setShowMenu(false)}
+                className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/20 transition-colors text-left"
+              >
+                <Heart className="w-5 h-5 text-white/80" />
+                <span className="text-sm text-white/90">我的收藏</span>
+                {totalFavorites > 0 && (
+                  <span className="ml-auto bg-white/20 text-white/90 text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {totalFavorites}
+                  </span>
+                )}
+              </Link>
+            </div>
 
             {/* 本月最佳 */}
-            <div className="border-t border-[#C8956C]/10 pt-3">
+            <div className="border-t border-white/10 pt-3">
               <div className="flex items-center gap-2 mb-3 px-3">
-                <TrendingUp className="w-4 h-4 text-[#C8956C]" />
-                <span className="text-sm text-[#4A6670]">本月最佳</span>
-                <span className="text-xs text-[#4A6670]/40">{mounted ? seasonLabels[currentSeason] : ""}</span>
+                <TrendingUp className="w-4 h-4 text-white/70" />
+                <span className="text-sm text-white/80">本月最佳</span>
+                <span className="text-xs text-white/40">{mounted ? seasonLabels[currentSeason] : ""}</span>
               </div>
               <div className="grid grid-cols-3 gap-3 px-3">
                 {monthlyRecs.slice(0, 3).map((city) => (
@@ -259,14 +267,14 @@ export default function HomePage() {
                     key={city.id}
                     href={`/city/${city.id}`}
                     onClick={() => setShowMenu(false)}
-                    className="shadow  flex flex-col rounded-2xl overflow-hidden liquid-glass transition-all duration-300 hover:scale-105 hover:liquid-glow text-left group"
+                    className="flex flex-col rounded-xl overflow-hidden eg-glass-sm hover:scale-105 transition-all duration-300 text-left group"
                   >
                     <div className="w-full aspect-[4/1] flex items-end p-2 relative" style={getGradientStyle(city.gradient)}>
                       <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                      <span className="text-white font-bold text-sm drop-shadow-md relative z-10">{city.name}</span>
+                      <span className="text-white font-bold text-xs drop-shadow-md relative z-10">{city.name}</span>
                     </div>
-                    <div className="w-full p-2.5 bg-white/60 backdrop-blur-sm">
-                      <p className="text-xs text-[#4A6670]/70 line-clamp-1">{city.duration}</p>
+                    <div className="w-full p-2 bg-white/10">
+                      <p className="text-[10px] text-white/60 line-clamp-1">{city.duration}</p>
                     </div>
                   </Link>
                 ))}
@@ -274,38 +282,38 @@ export default function HomePage() {
             </div>
 
             {/* 快捷入口 */}
-            <div className="border-t border-[#C8956C]/10 pt-3 space-y-1">
+            <div className="border-t border-white/10 pt-3 space-y-1">
               <Link
                 href="/nearby"
                 onClick={() => setShowMenu(false)}
-                className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-[#F5EDE4] transition-colors text-left"
+                className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-colors text-left"
               >
-                <MapPin className="w-5 h-5 text-green-500" />
+                <MapPin className="w-5 h-5 text-white/70" />
                 <div className="flex-1">
-                  <p className="text-sm text-[#4A6670]">周边短途</p>
-                  <p className="text-xs text-[#4A6670]/40">2小时可达的周末目的地</p>
+                  <p className="text-sm text-white/90">周边短途</p>
+                  <p className="text-xs text-white/40">2小时可达的周末目的地</p>
                 </div>
               </Link>
               <Link
                 href="/niche"
                 onClick={() => setShowMenu(false)}
-                className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-[#F5EDE4] transition-colors text-left"
+                className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-colors text-left"
               >
-                <Star className="w-5 h-5 text-purple-500" />
+                <Star className="w-5 h-5 text-white/70" />
                 <div className="flex-1">
-                  <p className="text-sm text-[#4A6670]">小众秘境</p>
-                  <p className="text-xs text-[#4A6670]/40">{nicheCitiesList.length}个宝藏地</p>
+                  <p className="text-sm text-white/90">小众秘境</p>
+                  <p className="text-xs text-white/40">{nicheCitiesList.length}个宝藏地</p>
                 </div>
               </Link>
               <Link
                 href="/holiday"
                 onClick={() => setShowMenu(false)}
-                className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-[#F5EDE4] transition-colors text-left"
+                className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/10 transition-colors text-left"
               >
-                <Shield className="w-5 h-5 text-amber-500" />
+                <Shield className="w-5 h-5 text-white/70" />
                 <div className="flex-1">
-                  <p className="text-sm text-[#4A6670]">节假日避坑</p>
-                  <p className="text-xs text-[#4A6670]/40">预警 + Plan B</p>
+                  <p className="text-sm text-white/90">节假日避坑</p>
+                  <p className="text-xs text-white/40">预警 + Plan B</p>
                 </div>
               </Link>
             </div>
@@ -317,8 +325,8 @@ export default function HomePage() {
       <main className="flex flex-col items-center justify-center min-h-[calc(100vh-7.5rem)] px-4">
         <div className="w-full max-w-md text-center">
           {/* 标题区 */}
-          <h1 className="text-2xl font-bold text-[#4A6670] mb-2">把下一站，交给惊喜</h1>
-          <p className="text-sm text-[#4A6670]/50 mb-10">
+          <h1 className="text-2xl font-bold text-white mb-2">把下一站，交给惊喜</h1>
+          <p className="text-sm text-white/60 mb-10">
             一键开启旅行盲盒，解锁专属目的地与完整攻略
           </p>
 
@@ -326,8 +334,7 @@ export default function HomePage() {
           {blindboxPhase === "idle" && (
             <button
               onClick={handleExplore}
-              className="w-full py-5 text-white rounded-3xl font-bold text-lg lc-depth-2 lc-shine hover:lc-depth-3 active:scale-[0.98] transition-all animate-breathe lc-liquid"
-              style={{ background: 'linear-gradient(135deg, #C8956C 0%, #A67B5B 50%, #8B6548 100%)' }}
+              className="w-full py-5 text-white rounded-3xl font-bold text-lg ethereal-glass hover:ethereal-glow active:scale-[0.98] transition-all animate-breathe"
             >
               <span className="flex items-center justify-center gap-2">
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -345,7 +352,7 @@ export default function HomePage() {
           {blindboxPhase === "shaking" && (
             <div className="w-full flex flex-col items-center justify-center py-8">
               <img src="/manghe.gif" alt="盲盒开启" className="w-48 h-48 object-contain mb-4 animate-lc-float" />
-              <p className="text-lg font-bold text-[#4A6670] animate-blindbox-shake">正在开启盲盒...</p>
+              <p className="text-lg font-bold text-white animate-blindbox-shake">正在开启盲盒...</p>
             </div>
           )}
 
@@ -353,17 +360,17 @@ export default function HomePage() {
           {/* 偏好筛选 - 按钮下方小字 */}
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="mt-6 text-xs text-[#4A6670]/30 hover:text-[#C8956C] transition-colors lc-liquid"
+            className="mt-6 text-xs text-white/40 hover:text-white/70 transition-colors"
           >
             {hasFilters ? `已选 ${selectedDestTypes.length + selectedDuration.length + selectedBudget.length} 个偏好 · 展开` : "想限定范围？自定义偏好"}
           </button>
 
           {/* 筛选面板 */}
           {showFilters && (
-            <div className="mt-4 lc-glass rounded-2xl p-4 animate-fade-in space-y-4 text-left">
+            <div className="mt-4 ethereal-glass rounded-2xl p-4 animate-fade-in space-y-4 text-left">
               {/* 目的地类型 */}
               <div>
-                <h3 className="text-xs font-semibold text-[#4A6670]/50 mb-2">目的地类型</h3>
+                <h3 className="text-xs font-semibold text-white/60 mb-2">目的地类型</h3>
                 <div className="flex flex-wrap gap-2">
                   {Object.entries(destTypeLabels).map(([key, label]) => (
                     <button
@@ -371,8 +378,8 @@ export default function HomePage() {
                       onClick={() => toggleFilter(selectedDestTypes, setSelectedDestTypes, key)}
                       className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs transition-all ${
                         selectedDestTypes.includes(key)
-                          ? "bg-[#C8956C] text-white shadow-sm"
-                          : "bg-[#F5EDE4] text-[#4A6670] hover:bg-[#C8956C]/10"
+                          ? "bg-white/30 text-white border border-white/40"
+                          : "bg-white/10 text-white/70 hover:bg-white/20 border border-white/20"
                       }`}
                     >
                       {destTypeIcons[key]}
@@ -384,7 +391,7 @@ export default function HomePage() {
 
               {/* 出行天数 */}
               <div>
-                <h3 className="text-xs font-semibold text-[#4A6670]/50 mb-2">出行天数</h3>
+                <h3 className="text-xs font-semibold text-white/60 mb-2">出行天数</h3>
                 <div className="flex flex-wrap gap-2">
                   {Object.entries(durationLabels).map(([key, label]) => (
                     <button
@@ -392,8 +399,8 @@ export default function HomePage() {
                       onClick={() => toggleFilter(selectedDuration, setSelectedDuration, key)}
                       className={`px-3 py-1.5 rounded-full text-xs transition-all ${
                         selectedDuration.includes(key)
-                          ? "bg-[#C8956C] text-white shadow-sm"
-                          : "bg-[#F5EDE4] text-[#4A6670] hover:bg-[#C8956C]/10"
+                          ? "bg-white/30 text-white border border-white/40"
+                          : "bg-white/10 text-white/70 hover:bg-white/20 border border-white/20"
                       }`}
                     >
                       {label}
@@ -404,7 +411,7 @@ export default function HomePage() {
 
               {/* 预算档位 */}
               <div>
-                <h3 className="text-xs font-semibold text-[#4A6670]/50 mb-2">预算档位</h3>
+                <h3 className="text-xs font-semibold text-white/60 mb-2">预算档位</h3>
                 <div className="flex flex-wrap gap-2">
                   {Object.entries(budgetLabels).map(([key, label]) => (
                     <button
@@ -412,8 +419,8 @@ export default function HomePage() {
                       onClick={() => toggleFilter(selectedBudget, setSelectedBudget, key)}
                       className={`px-3 py-1.5 rounded-full text-xs transition-all ${
                         selectedBudget.includes(key)
-                          ? "bg-[#C8956C] text-white shadow-sm"
-                          : "bg-[#F5EDE4] text-[#4A6670] hover:bg-[#C8956C]/10"
+                          ? "bg-white/30 text-white border border-white/40"
+                          : "bg-white/10 text-white/70 hover:bg-white/20 border border-white/20"
                       }`}
                     >
                       {label}
@@ -429,7 +436,7 @@ export default function HomePage() {
                     setSelectedDuration([]);
                     setSelectedBudget([]);
                   }}
-                  className="text-xs text-[#C8956C] hover:underline"
+                  className="text-xs text-white/70 hover:text-white hover:underline"
                 >
                   清除所有筛选
                 </button>
@@ -441,7 +448,7 @@ export default function HomePage() {
 
       {/* 底部极浅辅助信息 */}
       <footer className="mt-8 pb-4 text-center">
-        <p className="text-[10px] text-[#4A6670]/20">已收录 {allCities?.length * 2}+ 目的地与原创攻略</p>
+        <p className="text-[10px] text-white/30">已收录 {allCities?.length * 2}+ 目的地与原创攻略</p>
       </footer>
     </div>
   );
