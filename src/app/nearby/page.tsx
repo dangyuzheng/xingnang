@@ -1,33 +1,64 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "react-router-dom";
 import { allCities, getNearbyCities } from "@/lib/data-index";
 import { ArrowLeft, MapPin, Train, Car, Clock } from "lucide-react";
 
-const originCities = ["北京", "上海", "广州", "深圳", "成都", "重庆", "杭州", "西安"];
+const originCities = [
+  "北京",
+  "上海",
+  "广州",
+  "深圳",
+  "成都",
+  "重庆",
+  "杭州",
+  "西安",
+];
 
 export default function NearbyPage() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const [selectedOrigin, setSelectedOrigin] = useState<string>("");
 
   // 查找周边城市（简化：基于 nearbyFrom 字段匹配）
   const nearbyResults = selectedOrigin
-    ? allCities.filter((c) => c.nearbyFrom?.some((from) => from.includes(selectedOrigin) || selectedOrigin.includes(from)))
+    ? allCities.filter((c) =>
+        c.nearbyFrom?.some(
+          (from) =>
+            from.includes(selectedOrigin) || selectedOrigin.includes(from),
+        ),
+      )
     : [];
 
   // 按距离分类
-  const byCar1h = nearbyResults.filter((c) => c.nearbyDistance?.includes("30分钟") || c.nearbyDistance?.includes("45分钟"));
-  const byCar2h = nearbyResults.filter((c) => c.nearbyDistance?.includes("1小时") || c.nearbyDistance?.includes("1.5小时"));
-  const byTrain = nearbyResults.filter((c) => c.nearbyDistance?.includes("高铁"));
+  const byCar1h = nearbyResults.filter(
+    (c) =>
+      c.nearbyDistance?.includes("30分钟") ||
+      c.nearbyDistance?.includes("45分钟"),
+  );
+  const byCar2h = nearbyResults.filter(
+    (c) =>
+      c.nearbyDistance?.includes("1小时") ||
+      c.nearbyDistance?.includes("1.5小时"),
+  );
+  const byTrain = nearbyResults.filter((c) =>
+    c.nearbyDistance?.includes("高铁"),
+  );
 
-  const allNearby = selectedOrigin ? (nearbyResults.length > 0 ? nearbyResults : []) : [];
+  const allNearby = selectedOrigin
+    ? nearbyResults.length > 0
+      ? nearbyResults
+      : []
+    : [];
 
   return (
     <div className="min-h-screen bg-[#FAF7F2]">
       <nav className="sticky top-0 z-50 bg-[#FAF7F2]/90 backdrop-blur-md border-b border-[#C8956C]/10">
         <div className="max-w-2xl mx-auto px-4 h-14 flex items-center gap-3">
-          <button onClick={() => router.back()} className="w-10 h-10 rounded-full bg-white border border-[#C8956C]/10 flex items-center justify-center">
+          <button
+            onClick={() => navigate(-1)}
+            className="w-10 h-10 rounded-full bg-white border border-[#C8956C]/10 flex items-center justify-center"
+          >
             <ArrowLeft className="w-5 h-5 text-[#4A6670]" />
           </button>
           <div>
@@ -63,13 +94,17 @@ export default function NearbyPage() {
         {!selectedOrigin && (
           <div className="text-center py-12">
             <MapPin className="w-12 h-12 text-[#C8956C]/20 mx-auto mb-3" />
-            <p className="text-sm text-[#4A6670]/40">选择出发城市，查看周边短途推荐</p>
+            <p className="text-sm text-[#4A6670]/40">
+              选择出发城市，查看周边短途推荐
+            </p>
           </div>
         )}
 
         {selectedOrigin && allNearby.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-sm text-[#4A6670]/40">暂无从{selectedOrigin}出发的周边推荐</p>
+            <p className="text-sm text-[#4A6670]/40">
+              暂无从{selectedOrigin}出发的周边推荐
+            </p>
           </div>
         )}
 
@@ -81,7 +116,11 @@ export default function NearbyPage() {
             </h3>
             <div className="space-y-2">
               {byCar1h.map((city) => (
-                <CityCard key={city.id} city={city} onClick={() => router.push(`/city/${city.id}`)} />
+                <CityCard
+                  key={city.id}
+                  city={city}
+                  onClick={() => navigate(`/city/${city.id}`)}
+                />
               ))}
             </div>
           </div>
@@ -94,7 +133,11 @@ export default function NearbyPage() {
             </h3>
             <div className="space-y-2">
               {byCar2h.map((city) => (
-                <CityCard key={city.id} city={city} onClick={() => router.push(`/city/${city.id}`)} />
+                <CityCard
+                  key={city.id}
+                  city={city}
+                  onClick={() => navigate(`/city/${city.id}`)}
+                />
               ))}
             </div>
           </div>
@@ -107,7 +150,11 @@ export default function NearbyPage() {
             </h3>
             <div className="space-y-2">
               {byTrain.map((city) => (
-                <CityCard key={city.id} city={city} onClick={() => router.push(`/city/${city.id}`)} />
+                <CityCard
+                  key={city.id}
+                  city={city}
+                  onClick={() => navigate(`/city/${city.id}`)}
+                />
               ))}
             </div>
           </div>
@@ -117,10 +164,21 @@ export default function NearbyPage() {
   );
 }
 
-function CityCard({ city, onClick }: { city: (typeof allCities)[number]; onClick: () => void }) {
+function CityCard({
+  city,
+  onClick,
+}: {
+  city: (typeof allCities)[number];
+  onClick: () => void;
+}) {
   return (
-    <button onClick={onClick} className="w-full bg-white rounded-xl border border-[#C8956C]/10 p-3 flex items-center gap-3 hover:shadow-md transition-shadow text-left">
-      <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${city.gradient} flex items-center justify-center shrink-0`}>
+    <button
+      onClick={onClick}
+      className="w-full bg-white rounded-xl border border-[#C8956C]/10 p-3 flex items-center gap-3 hover:shadow-md transition-shadow text-left"
+    >
+      <div
+        className={`w-12 h-12 rounded-lg bg-gradient-to-br ${city.gradient} flex items-center justify-center shrink-0`}
+      >
         <span className="text-white font-bold text-sm">{city.name[0]}</span>
       </div>
       <div className="flex-1 min-w-0">

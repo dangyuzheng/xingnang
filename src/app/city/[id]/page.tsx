@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, use } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { getCityById, packingCategoryLabels } from "@/lib/data-index";
 import { useFavorites } from "@/hooks/use-favorites";
 import type { CityGuide } from "@/lib/types";
@@ -36,7 +36,11 @@ const tabs: { key: TabKey; label: string; icon: React.ReactNode }[] = [
   { key: "fun", label: "好玩", icon: <Star className="w-4 h-4" /> },
   { key: "food", label: "好吃", icon: <Utensils className="w-4 h-4" /> },
   { key: "shop", label: "好逛", icon: <ShoppingBag className="w-4 h-4" /> },
-  { key: "pitfall", label: "避坑", icon: <AlertTriangle className="w-4 h-4" /> },
+  {
+    key: "pitfall",
+    label: "避坑",
+    icon: <AlertTriangle className="w-4 h-4" />,
+  },
 ];
 
 const priorityLabels: Record<string, { label: string; color: string }> = {
@@ -45,11 +49,30 @@ const priorityLabels: Record<string, { label: string; color: string }> = {
   nearby: { label: "顺路可逛", color: "bg-[#4A6670]/40 text-[#4A6670]" },
 };
 
-const pitfallCategoryLabels: Record<string, { label: string; icon: React.ReactNode; color: string }> = {
-  traffic: { label: "交通", icon: <Train className="w-3 h-3" />, color: "bg-blue-50 text-blue-600 border-blue-100" },
-  scenic: { label: "景点", icon: <MapPin className="w-3 h-3" />, color: "bg-green-50 text-green-600 border-green-100" },
-  food: { label: "美食", icon: <Utensils className="w-3 h-3" />, color: "bg-orange-50 text-orange-600 border-orange-100" },
-  general: { label: "出行", icon: <AlertTriangle className="w-3 h-3" />, color: "bg-red-50 text-red-600 border-red-100" },
+const pitfallCategoryLabels: Record<
+  string,
+  { label: string; icon: React.ReactNode; color: string }
+> = {
+  traffic: {
+    label: "交通",
+    icon: <Train className="w-3 h-3" />,
+    color: "bg-blue-50 text-blue-600 border-blue-100",
+  },
+  scenic: {
+    label: "景点",
+    icon: <MapPin className="w-3 h-3" />,
+    color: "bg-green-50 text-green-600 border-green-100",
+  },
+  food: {
+    label: "美食",
+    icon: <Utensils className="w-3 h-3" />,
+    color: "bg-orange-50 text-orange-600 border-orange-100",
+  },
+  general: {
+    label: "出行",
+    icon: <AlertTriangle className="w-3 h-3" />,
+    color: "bg-red-50 text-red-600 border-red-100",
+  },
 };
 
 const shopCategoryLabels: Record<string, string> = {
@@ -58,27 +81,42 @@ const shopCategoryLabels: Record<string, string> = {
   night_market: "夜市/市集",
 };
 
-export default function CityDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
-  const router = useRouter();
-  const city = getCityById(id);
-  const { isFavorite, getCityLists, addToList, lists, createList, setFootprint, getFootprint } = useFavorites();
+export default function CityDetailPage() {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const city = getCityById(id || "");
+  const {
+    isFavorite,
+    getCityLists,
+    addToList,
+    lists,
+    createList,
+    setFootprint,
+    getFootprint,
+  } = useFavorites();
 
   const [activeTab, setActiveTab] = useState<TabKey>("fun");
-  const [itineraryMode, setItineraryMode] = useState<"easy" | "intense">("easy");
+  const [itineraryMode, setItineraryMode] = useState<"easy" | "intense">(
+    "easy",
+  );
   const [showPacking, setShowPacking] = useState(false);
   const [showBudget, setShowBudget] = useState(false);
   const [showShare, setShowShare] = useState(false);
   const [showAddToList, setShowAddToList] = useState(false);
   const [budgetPeople, setBudgetPeople] = useState(2);
-  const [budgetHotelLevel, setBudgetHotelLevel] = useState<"budget" | "comfort" | "luxury">("comfort");
+  const [budgetHotelLevel, setBudgetHotelLevel] = useState<
+    "budget" | "comfort" | "luxury"
+  >("comfort");
 
   if (!city) {
     return (
       <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center">
         <div className="text-center">
           <p className="text-[#4A6670]/60 mb-4">城市未找到</p>
-          <button onClick={() => router.push("/")} className="text-[#C8956C] hover:underline">
+          <button
+            onClick={() => navigate("/")}
+            className="text-[#C8956C] hover:underline"
+          >
             返回首页
           </button>
         </div>
@@ -91,7 +129,10 @@ export default function CityDetailPage({ params }: { params: Promise<{ id: strin
   const footprint = getFootprint(city.id);
 
   const handleShare = async () => {
-    const text = `🌍 ${city.name}·${city.province} 旅行攻略\n\n📅 最佳时间：${city.bestTime}\n⏱ 建议天数：${city.duration}\n💰 预算：${city.budget}\n\n${city.funSpots.slice(0, 3).map((s) => `🎯 ${s.name} — ${s.tagline}`).join("\n")}\n\n⚠️ 核心提醒：${city.coreTip}\n\n—— 来自「行囊」旅行攻略`;
+    const text = `🌍 ${city.name}·${city.province} 旅行攻略\n\n📅 最佳时间：${city.bestTime}\n⏱ 建议天数：${city.duration}\n💰 预算：${city.budget}\n\n${city.funSpots
+      .slice(0, 3)
+      .map((s) => `🎯 ${s.name} — ${s.tagline}`)
+      .join("\n")}\n\n⚠️ 核心提醒：${city.coreTip}\n\n—— 来自「行囊」旅行攻略`;
 
     if (navigator.share) {
       try {
@@ -111,10 +152,19 @@ export default function CityDetailPage({ params }: { params: Promise<{ id: strin
     const base = city.budget.match(/\d+/g);
     if (!base) return { low: 0, high: 0 };
     const perPerson = (parseInt(base[0]) + parseInt(base[1] || base[0])) / 2;
-    const hotelPerNight = budgetHotelLevel === "budget" ? 150 : budgetHotelLevel === "comfort" ? 350 : 700;
+    const hotelPerNight =
+      budgetHotelLevel === "budget"
+        ? 150
+        : budgetHotelLevel === "comfort"
+          ? 350
+          : 700;
     const days = parseInt(city.duration) || 3;
-    const low = Math.round((perPerson * budgetPeople * 0.7 + hotelPerNight * (days - 1)));
-    const high = Math.round((perPerson * budgetPeople * 1.3 + hotelPerNight * (days - 1) * 1.5));
+    const low = Math.round(
+      perPerson * budgetPeople * 0.7 + hotelPerNight * (days - 1),
+    );
+    const high = Math.round(
+      perPerson * budgetPeople * 1.3 + hotelPerNight * (days - 1) * 1.5,
+    );
     return { low, high, days, hotelPerNight };
   };
 
@@ -125,121 +175,294 @@ export default function CityDetailPage({ params }: { params: Promise<{ id: strin
   const getGradientStyle = (gradient: string) => {
     const colorMap: Record<string, string> = {
       // 100 variants
-      'from-amber-100': '#fef3c7', 'from-blue-100': '#dbeafe', 'from-cyan-100': '#cffafe',
-      'from-emerald-100': '#d1fae5', 'from-green-100': '#dcfce7', 'from-indigo-100': '#e0e7ff',
-      'from-orange-100': '#ffedd5', 'from-pink-100': '#fce7f3', 'from-purple-100': '#f3e8ff',
-      'from-red-100': '#fee2e2', 'from-rose-100': '#ffe4e6', 'from-sky-100': '#e0f2fe',
-      'from-teal-100': '#ccfbf1', 'from-violet-100': '#ede9fe', 'from-yellow-100': '#fef9c3',
-      'via-amber-100': '#fef3c7', 'via-blue-100': '#dbeafe', 'via-cyan-100': '#cffafe',
-      'via-emerald-100': '#d1fae5', 'via-green-100': '#dcfce7', 'via-indigo-100': '#e0e7ff',
-      'via-orange-100': '#ffedd5', 'via-pink-100': '#fce7f3', 'via-purple-100': '#f3e8ff',
-      'via-red-100': '#fee2e2', 'via-rose-100': '#ffe4e6', 'via-sky-100': '#e0f2fe',
-      'via-teal-100': '#ccfbf1', 'via-violet-100': '#ede9fe', 'via-yellow-100': '#fef9c3',
-      'to-amber-100': '#fef3c7', 'to-blue-100': '#dbeafe', 'to-cyan-100': '#cffafe',
-      'to-emerald-100': '#d1fae5', 'to-green-100': '#dcfce7', 'to-indigo-100': '#e0e7ff',
-      'to-orange-100': '#ffedd5', 'to-pink-100': '#fce7f3', 'to-purple-100': '#f3e8ff',
-      'to-red-100': '#fee2e2', 'to-rose-100': '#ffe4e6', 'to-sky-100': '#e0f2fe',
-      'to-teal-100': '#ccfbf1', 'to-violet-100': '#ede9fe', 'to-yellow-100': '#fef9c3',
+      "from-amber-100": "#fef3c7",
+      "from-blue-100": "#dbeafe",
+      "from-cyan-100": "#cffafe",
+      "from-emerald-100": "#d1fae5",
+      "from-green-100": "#dcfce7",
+      "from-indigo-100": "#e0e7ff",
+      "from-orange-100": "#ffedd5",
+      "from-pink-100": "#fce7f3",
+      "from-purple-100": "#f3e8ff",
+      "from-red-100": "#fee2e2",
+      "from-rose-100": "#ffe4e6",
+      "from-sky-100": "#e0f2fe",
+      "from-teal-100": "#ccfbf1",
+      "from-violet-100": "#ede9fe",
+      "from-yellow-100": "#fef9c3",
+      "via-amber-100": "#fef3c7",
+      "via-blue-100": "#dbeafe",
+      "via-cyan-100": "#cffafe",
+      "via-emerald-100": "#d1fae5",
+      "via-green-100": "#dcfce7",
+      "via-indigo-100": "#e0e7ff",
+      "via-orange-100": "#ffedd5",
+      "via-pink-100": "#fce7f3",
+      "via-purple-100": "#f3e8ff",
+      "via-red-100": "#fee2e2",
+      "via-rose-100": "#ffe4e6",
+      "via-sky-100": "#e0f2fe",
+      "via-teal-100": "#ccfbf1",
+      "via-violet-100": "#ede9fe",
+      "via-yellow-100": "#fef9c3",
+      "to-amber-100": "#fef3c7",
+      "to-blue-100": "#dbeafe",
+      "to-cyan-100": "#cffafe",
+      "to-emerald-100": "#d1fae5",
+      "to-green-100": "#dcfce7",
+      "to-indigo-100": "#e0e7ff",
+      "to-orange-100": "#ffedd5",
+      "to-pink-100": "#fce7f3",
+      "to-purple-100": "#f3e8ff",
+      "to-red-100": "#fee2e2",
+      "to-rose-100": "#ffe4e6",
+      "to-sky-100": "#e0f2fe",
+      "to-teal-100": "#ccfbf1",
+      "to-violet-100": "#ede9fe",
+      "to-yellow-100": "#fef9c3",
       // 200 variants
-      'from-amber-200': '#fde68a', 'from-blue-200': '#bfdbfe', 'from-cyan-200': '#a5f3fc',
-      'from-emerald-200': '#a7f3d0', 'from-green-200': '#bbf7d0', 'from-indigo-200': '#c7d2fe',
-      'from-orange-200': '#fed7aa', 'from-pink-200': '#fbcfe8', 'from-purple-200': '#e9d5ff',
-      'from-red-200': '#fecaca', 'from-rose-200': '#fecdd3', 'from-sky-200': '#bae6fd',
-      'from-teal-200': '#99f6e4', 'from-violet-200': '#ddd6fe', 'from-yellow-200': '#fef08a',
-      'from-gray-200': '#e5e7eb', 'from-slate-200': '#e2e8f0', 'from-zinc-200': '#e4e4e7',
-      'from-fuchsia-200': '#f5d0fe',
-      'via-amber-200': '#fde68a', 'via-blue-200': '#bfdbfe', 'via-cyan-200': '#a5f3fc',
-      'via-emerald-200': '#a7f3d0', 'via-green-200': '#bbf7d0', 'via-indigo-200': '#c7d2fe',
-      'via-orange-200': '#fed7aa', 'via-pink-200': '#fbcfe8', 'via-purple-200': '#e9d5ff',
-      'via-red-200': '#fecaca', 'via-rose-200': '#fecdd3', 'via-sky-200': '#bae6fd',
-      'via-teal-200': '#99f6e4', 'via-violet-200': '#ddd6fe', 'via-yellow-200': '#fef08a',
-      'via-gray-200': '#e5e7eb', 'via-slate-200': '#e2e8f0', 'via-zinc-200': '#e4e4e7',
-      'via-fuchsia-200': '#f5d0fe',
-      'to-amber-200': '#fde68a', 'to-blue-200': '#bfdbfe', 'to-cyan-200': '#a5f3fc',
-      'to-emerald-200': '#a7f3d0', 'to-green-200': '#bbf7d0', 'to-indigo-200': '#c7d2fe',
-      'to-orange-200': '#fed7aa', 'to-pink-200': '#fbcfe8', 'to-purple-200': '#e9d5ff',
-      'to-red-200': '#fecaca', 'to-rose-200': '#fecdd3', 'to-sky-200': '#bae6fd',
-      'to-teal-200': '#99f6e4', 'to-violet-200': '#ddd6fe', 'to-yellow-200': '#fef08a',
-      'to-gray-200': '#e5e7eb', 'to-slate-200': '#e2e8f0', 'to-zinc-200': '#e4e4e7',
-      'to-fuchsia-200': '#f5d0fe',
+      "from-amber-200": "#fde68a",
+      "from-blue-200": "#bfdbfe",
+      "from-cyan-200": "#a5f3fc",
+      "from-emerald-200": "#a7f3d0",
+      "from-green-200": "#bbf7d0",
+      "from-indigo-200": "#c7d2fe",
+      "from-orange-200": "#fed7aa",
+      "from-pink-200": "#fbcfe8",
+      "from-purple-200": "#e9d5ff",
+      "from-red-200": "#fecaca",
+      "from-rose-200": "#fecdd3",
+      "from-sky-200": "#bae6fd",
+      "from-teal-200": "#99f6e4",
+      "from-violet-200": "#ddd6fe",
+      "from-yellow-200": "#fef08a",
+      "from-gray-200": "#e5e7eb",
+      "from-slate-200": "#e2e8f0",
+      "from-zinc-200": "#e4e4e7",
+      "from-fuchsia-200": "#f5d0fe",
+      "via-amber-200": "#fde68a",
+      "via-blue-200": "#bfdbfe",
+      "via-cyan-200": "#a5f3fc",
+      "via-emerald-200": "#a7f3d0",
+      "via-green-200": "#bbf7d0",
+      "via-indigo-200": "#c7d2fe",
+      "via-orange-200": "#fed7aa",
+      "via-pink-200": "#fbcfe8",
+      "via-purple-200": "#e9d5ff",
+      "via-red-200": "#fecaca",
+      "via-rose-200": "#fecdd3",
+      "via-sky-200": "#bae6fd",
+      "via-teal-200": "#99f6e4",
+      "via-violet-200": "#ddd6fe",
+      "via-yellow-200": "#fef08a",
+      "via-gray-200": "#e5e7eb",
+      "via-slate-200": "#e2e8f0",
+      "via-zinc-200": "#e4e4e7",
+      "via-fuchsia-200": "#f5d0fe",
+      "to-amber-200": "#fde68a",
+      "to-blue-200": "#bfdbfe",
+      "to-cyan-200": "#a5f3fc",
+      "to-emerald-200": "#a7f3d0",
+      "to-green-200": "#bbf7d0",
+      "to-indigo-200": "#c7d2fe",
+      "to-orange-200": "#fed7aa",
+      "to-pink-200": "#fbcfe8",
+      "to-purple-200": "#e9d5ff",
+      "to-red-200": "#fecaca",
+      "to-rose-200": "#fecdd3",
+      "to-sky-200": "#bae6fd",
+      "to-teal-200": "#99f6e4",
+      "to-violet-200": "#ddd6fe",
+      "to-yellow-200": "#fef08a",
+      "to-gray-200": "#e5e7eb",
+      "to-slate-200": "#e2e8f0",
+      "to-zinc-200": "#e4e4e7",
+      "to-fuchsia-200": "#f5d0fe",
       // 300 variants
-      'from-amber-300': '#fcd34d', 'from-blue-300': '#93c5fd', 'from-cyan-300': '#67e8f9',
-      'from-emerald-300': '#6ee7b7', 'from-green-300': '#86efac', 'from-indigo-300': '#a5b4fc',
-      'from-orange-300': '#fdba74', 'from-pink-300': '#f9a8d4', 'from-purple-300': '#d8b4fe',
-      'from-red-300': '#fca5a5', 'from-rose-300': '#fda4af', 'from-sky-300': '#7dd3fc',
-      'from-teal-300': '#5eead4', 'from-violet-300': '#c4b5fd', 'from-yellow-300': '#fde047',
-      'from-gray-300': '#d1d5db', 'from-slate-300': '#cbd5e1', 'from-zinc-300': '#d4d4d8',
-      'from-fuchsia-300': '#e879f9',
-      'via-amber-300': '#fcd34d', 'via-blue-300': '#93c5fd', 'via-cyan-300': '#67e8f9',
-      'via-emerald-300': '#6ee7b7', 'via-green-300': '#86efac', 'via-indigo-300': '#a5b4fc',
-      'via-orange-300': '#fdba74', 'via-pink-300': '#f9a8d4', 'via-purple-300': '#d8b4fe',
-      'via-red-300': '#fca5a5', 'via-rose-300': '#fda4af', 'via-sky-300': '#7dd3fc',
-      'via-teal-300': '#5eead4', 'via-violet-300': '#c4b5fd', 'via-yellow-300': '#fde047',
-      'via-gray-300': '#d1d5db', 'via-slate-300': '#cbd5e1', 'via-zinc-300': '#d4d4d8',
-      'via-fuchsia-300': '#e879f9',
-      'to-amber-300': '#fcd34d', 'to-blue-300': '#93c5fd', 'to-cyan-300': '#67e8f9',
-      'to-emerald-300': '#6ee7b7', 'to-green-300': '#86efac', 'to-indigo-300': '#a5b4fc',
-      'to-orange-300': '#fdba74', 'to-pink-300': '#f9a8d4', 'to-purple-300': '#d8b4fe',
-      'to-red-300': '#fca5a5', 'to-rose-300': '#fda4af', 'to-sky-300': '#7dd3fc',
-      'to-teal-300': '#5eead4', 'to-violet-300': '#c4b5fd', 'to-yellow-300': '#fde047',
-      'to-gray-300': '#d1d5db', 'to-slate-300': '#cbd5e1', 'to-zinc-300': '#d4d4d8',
-      'to-fuchsia-300': '#e879f9',
+      "from-amber-300": "#fcd34d",
+      "from-blue-300": "#93c5fd",
+      "from-cyan-300": "#67e8f9",
+      "from-emerald-300": "#6ee7b7",
+      "from-green-300": "#86efac",
+      "from-indigo-300": "#a5b4fc",
+      "from-orange-300": "#fdba74",
+      "from-pink-300": "#f9a8d4",
+      "from-purple-300": "#d8b4fe",
+      "from-red-300": "#fca5a5",
+      "from-rose-300": "#fda4af",
+      "from-sky-300": "#7dd3fc",
+      "from-teal-300": "#5eead4",
+      "from-violet-300": "#c4b5fd",
+      "from-yellow-300": "#fde047",
+      "from-gray-300": "#d1d5db",
+      "from-slate-300": "#cbd5e1",
+      "from-zinc-300": "#d4d4d8",
+      "from-fuchsia-300": "#e879f9",
+      "via-amber-300": "#fcd34d",
+      "via-blue-300": "#93c5fd",
+      "via-cyan-300": "#67e8f9",
+      "via-emerald-300": "#6ee7b7",
+      "via-green-300": "#86efac",
+      "via-indigo-300": "#a5b4fc",
+      "via-orange-300": "#fdba74",
+      "via-pink-300": "#f9a8d4",
+      "via-purple-300": "#d8b4fe",
+      "via-red-300": "#fca5a5",
+      "via-rose-300": "#fda4af",
+      "via-sky-300": "#7dd3fc",
+      "via-teal-300": "#5eead4",
+      "via-violet-300": "#c4b5fd",
+      "via-yellow-300": "#fde047",
+      "via-gray-300": "#d1d5db",
+      "via-slate-300": "#cbd5e1",
+      "via-zinc-300": "#d4d4d8",
+      "via-fuchsia-300": "#e879f9",
+      "to-amber-300": "#fcd34d",
+      "to-blue-300": "#93c5fd",
+      "to-cyan-300": "#67e8f9",
+      "to-emerald-300": "#6ee7b7",
+      "to-green-300": "#86efac",
+      "to-indigo-300": "#a5b4fc",
+      "to-orange-300": "#fdba74",
+      "to-pink-300": "#f9a8d4",
+      "to-purple-300": "#d8b4fe",
+      "to-red-300": "#fca5a5",
+      "to-rose-300": "#fda4af",
+      "to-sky-300": "#7dd3fc",
+      "to-teal-300": "#5eead4",
+      "to-violet-300": "#c4b5fd",
+      "to-yellow-300": "#fde047",
+      "to-gray-300": "#d1d5db",
+      "to-slate-300": "#cbd5e1",
+      "to-zinc-300": "#d4d4d8",
+      "to-fuchsia-300": "#e879f9",
       // 400 variants
-      'from-amber-400': '#fbbf24', 'from-blue-400': '#60a5fa', 'from-cyan-400': '#22d3ee',
-      'from-emerald-400': '#34d399', 'from-green-400': '#4ade80', 'from-indigo-400': '#818cf8',
-      'from-orange-400': '#fb923c', 'from-pink-400': '#f472b6', 'from-purple-400': '#c084fc',
-      'from-red-400': '#f87171', 'from-rose-400': '#fb7185', 'from-sky-400': '#38bdf8',
-      'from-teal-400': '#2dd4bf', 'from-violet-400': '#a78bfa', 'from-yellow-400': '#facc15',
-      'via-amber-400': '#fbbf24', 'via-blue-400': '#60a5fa', 'via-cyan-400': '#22d3ee',
-      'via-emerald-400': '#34d399', 'via-green-400': '#4ade80', 'via-indigo-400': '#818cf8',
-      'via-orange-400': '#fb923c', 'via-pink-400': '#f472b6', 'via-purple-400': '#c084fc',
-      'via-red-400': '#f87171', 'via-rose-400': '#fb7185', 'via-sky-400': '#38bdf8',
-      'via-teal-400': '#2dd4bf', 'via-violet-400': '#a78bfa', 'via-yellow-400': '#facc15',
-      'to-amber-400': '#fbbf24', 'to-blue-400': '#60a5fa', 'to-cyan-400': '#22d3ee',
-      'to-emerald-400': '#34d399', 'to-green-400': '#4ade80', 'to-indigo-400': '#818cf8',
-      'to-orange-400': '#fb923c', 'to-pink-400': '#f472b6', 'to-purple-400': '#c084fc',
-      'to-red-400': '#f87171', 'to-rose-400': '#fb7185', 'to-sky-400': '#38bdf8',
-      'to-teal-400': '#2dd4bf', 'to-violet-400': '#a78bfa', 'to-yellow-400': '#facc15',
+      "from-amber-400": "#fbbf24",
+      "from-blue-400": "#60a5fa",
+      "from-cyan-400": "#22d3ee",
+      "from-emerald-400": "#34d399",
+      "from-green-400": "#4ade80",
+      "from-indigo-400": "#818cf8",
+      "from-orange-400": "#fb923c",
+      "from-pink-400": "#f472b6",
+      "from-purple-400": "#c084fc",
+      "from-red-400": "#f87171",
+      "from-rose-400": "#fb7185",
+      "from-sky-400": "#38bdf8",
+      "from-teal-400": "#2dd4bf",
+      "from-violet-400": "#a78bfa",
+      "from-yellow-400": "#facc15",
+      "via-amber-400": "#fbbf24",
+      "via-blue-400": "#60a5fa",
+      "via-cyan-400": "#22d3ee",
+      "via-emerald-400": "#34d399",
+      "via-green-400": "#4ade80",
+      "via-indigo-400": "#818cf8",
+      "via-orange-400": "#fb923c",
+      "via-pink-400": "#f472b6",
+      "via-purple-400": "#c084fc",
+      "via-red-400": "#f87171",
+      "via-rose-400": "#fb7185",
+      "via-sky-400": "#38bdf8",
+      "via-teal-400": "#2dd4bf",
+      "via-violet-400": "#a78bfa",
+      "via-yellow-400": "#facc15",
+      "to-amber-400": "#fbbf24",
+      "to-blue-400": "#60a5fa",
+      "to-cyan-400": "#22d3ee",
+      "to-emerald-400": "#34d399",
+      "to-green-400": "#4ade80",
+      "to-indigo-400": "#818cf8",
+      "to-orange-400": "#fb923c",
+      "to-pink-400": "#f472b6",
+      "to-purple-400": "#c084fc",
+      "to-red-400": "#f87171",
+      "to-rose-400": "#fb7185",
+      "to-sky-400": "#38bdf8",
+      "to-teal-400": "#2dd4bf",
+      "to-violet-400": "#a78bfa",
+      "to-yellow-400": "#facc15",
       // 500 variants
-      'from-amber-500': '#f59e0b', 'from-blue-500': '#3b82f6', 'from-cyan-500': '#06b6d4',
-      'from-emerald-500': '#10b981', 'from-green-500': '#22c55e', 'from-indigo-500': '#6366f1',
-      'from-orange-500': '#f97316', 'from-pink-500': '#ec4899', 'from-purple-500': '#a855f7',
-      'from-red-500': '#ef4444', 'from-rose-500': '#f43f5e', 'from-sky-500': '#0ea5e9',
-      'from-teal-500': '#14b8a6', 'from-violet-500': '#8b5cf6', 'from-yellow-500': '#eab308',
-      'via-amber-500': '#f59e0b', 'via-blue-500': '#3b82f6', 'via-cyan-500': '#06b6d4',
-      'via-emerald-500': '#10b981', 'via-green-500': '#22c55e', 'via-indigo-500': '#6366f1',
-      'via-orange-500': '#f97316', 'via-pink-500': '#ec4899', 'via-purple-500': '#a855f7',
-      'via-red-500': '#ef4444', 'via-rose-500': '#f43f5e', 'via-sky-500': '#0ea5e9',
-      'via-teal-500': '#14b8a6', 'via-violet-500': '#8b5cf6', 'via-yellow-500': '#eab308',
-      'to-amber-500': '#f59e0b', 'to-blue-500': '#3b82f6', 'to-cyan-500': '#06b6d4',
-      'to-emerald-500': '#10b981', 'to-green-500': '#22c55e', 'to-indigo-500': '#6366f1',
-      'to-orange-500': '#f97316', 'to-pink-500': '#ec4899', 'to-purple-500': '#a855f7',
-      'to-red-500': '#ef4444', 'to-rose-500': '#f43f5e', 'to-sky-500': '#0ea5e9',
-      'to-teal-500': '#14b8a6', 'to-violet-500': '#8b5cf6', 'to-yellow-500': '#eab308',
+      "from-amber-500": "#f59e0b",
+      "from-blue-500": "#3b82f6",
+      "from-cyan-500": "#06b6d4",
+      "from-emerald-500": "#10b981",
+      "from-green-500": "#22c55e",
+      "from-indigo-500": "#6366f1",
+      "from-orange-500": "#f97316",
+      "from-pink-500": "#ec4899",
+      "from-purple-500": "#a855f7",
+      "from-red-500": "#ef4444",
+      "from-rose-500": "#f43f5e",
+      "from-sky-500": "#0ea5e9",
+      "from-teal-500": "#14b8a6",
+      "from-violet-500": "#8b5cf6",
+      "from-yellow-500": "#eab308",
+      "via-amber-500": "#f59e0b",
+      "via-blue-500": "#3b82f6",
+      "via-cyan-500": "#06b6d4",
+      "via-emerald-500": "#10b981",
+      "via-green-500": "#22c55e",
+      "via-indigo-500": "#6366f1",
+      "via-orange-500": "#f97316",
+      "via-pink-500": "#ec4899",
+      "via-purple-500": "#a855f7",
+      "via-red-500": "#ef4444",
+      "via-rose-500": "#f43f5e",
+      "via-sky-500": "#0ea5e9",
+      "via-teal-500": "#14b8a6",
+      "via-violet-500": "#8b5cf6",
+      "via-yellow-500": "#eab308",
+      "to-amber-500": "#f59e0b",
+      "to-blue-500": "#3b82f6",
+      "to-cyan-500": "#06b6d4",
+      "to-emerald-500": "#10b981",
+      "to-green-500": "#22c55e",
+      "to-indigo-500": "#6366f1",
+      "to-orange-500": "#f97316",
+      "to-pink-500": "#ec4899",
+      "to-purple-500": "#a855f7",
+      "to-red-500": "#ef4444",
+      "to-rose-500": "#f43f5e",
+      "to-sky-500": "#0ea5e9",
+      "to-teal-500": "#14b8a6",
+      "to-violet-500": "#8b5cf6",
+      "to-yellow-500": "#eab308",
       // Special colors
-      'from-white': '#ffffff', 'via-white': '#ffffff', 'to-white': '#ffffff',
+      "from-white": "#ffffff",
+      "via-white": "#ffffff",
+      "to-white": "#ffffff",
     };
 
-    const parts = gradient.split(' ');
-    const colors = parts.map(p => colorMap[p]).filter(Boolean);
+    const parts = gradient.split(" ");
+    const colors = parts.map((p) => colorMap[p]).filter(Boolean);
 
     if (colors.length === 2) {
-      return { backgroundImage: `linear-gradient(to bottom right, ${colors[0]}, ${colors[1]})` };
+      return {
+        backgroundImage: `linear-gradient(to bottom right, ${colors[0]}, ${colors[1]})`,
+      };
     } else if (colors.length >= 3) {
-      return { backgroundImage: `linear-gradient(to bottom right, ${colors[0]}, ${colors[1]}, ${colors[2]})` };
+      return {
+        backgroundImage: `linear-gradient(to bottom right, ${colors[0]}, ${colors[1]}, ${colors[2]})`,
+      };
     }
-    return { backgroundImage: `linear-gradient(to bottom right, #C8956C, #A67B5B)` };
+    return {
+      backgroundImage: `linear-gradient(to bottom right, #C8956C, #A67B5B)`,
+    };
   };
 
   return (
     <div className="min-h-screen bg-[#FAF7F2] pb-24">
       {/* 顶部头图信息卡 */}
-      <div className="relative pt-12 pb-8 px-4" style={getGradientStyle(city.gradient)}>
+      <div
+        className="relative pt-12 pb-8 px-4"
+        style={getGradientStyle(city.gradient)}
+      >
         <div className="absolute inset-0 bg-black/10" />
         {/* 导航 */}
         <div className="relative flex items-center justify-between mb-8">
           <button
-            onClick={() => router.back()}
+            onClick={() => navigate(-1)}
             className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center"
           >
             <ArrowLeft className="w-5 h-5 text-white" />
@@ -257,7 +480,9 @@ export default function CityDetailPage({ params }: { params: Promise<{ id: strin
                 fav ? "bg-[#E8655A]" : "bg-white/20 backdrop-blur-sm"
               }`}
             >
-              <Heart className={`w-5 h-5 ${fav ? "text-white fill-white" : "text-white"}`} />
+              <Heart
+                className={`w-5 h-5 ${fav ? "text-white fill-white" : "text-white"}`}
+              />
             </button>
           </div>
         </div>
@@ -296,9 +521,13 @@ export default function CityDetailPage({ params }: { params: Promise<{ id: strin
         <div className="mx-4 mt-3 bg-red-50 border border-red-200 rounded-xl p-3 flex items-start gap-2">
           <AlertTriangle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
           <div>
-            <p className="text-xs text-red-800 font-medium">{city.holidayWarning}</p>
+            <p className="text-xs text-red-800 font-medium">
+              {city.holidayWarning}
+            </p>
             {city.holidayAlternative && (
-              <p className="text-xs text-red-600 mt-1">替代方案：{city.holidayAlternative}</p>
+              <p className="text-xs text-red-600 mt-1">
+                替代方案：{city.holidayAlternative}
+              </p>
             )}
           </div>
         </div>
@@ -377,7 +606,9 @@ export default function CityDetailPage({ params }: { params: Promise<{ id: strin
           <button
             onClick={() => setItineraryMode("easy")}
             className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
-              itineraryMode === "easy" ? "bg-[#C8956C] text-white" : "bg-[#F5EDE4] text-[#4A6670]"
+              itineraryMode === "easy"
+                ? "bg-[#C8956C] text-white"
+                : "bg-[#F5EDE4] text-[#4A6670]"
             }`}
           >
             松弛慢游版
@@ -385,7 +616,9 @@ export default function CityDetailPage({ params }: { params: Promise<{ id: strin
           <button
             onClick={() => setItineraryMode("intense")}
             className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
-              itineraryMode === "intense" ? "bg-[#C8956C] text-white" : "bg-[#F5EDE4] text-[#4A6670]"
+              itineraryMode === "intense"
+                ? "bg-[#C8956C] text-white"
+                : "bg-[#F5EDE4] text-[#4A6670]"
             }`}
           >
             深度暴走版
@@ -407,7 +640,9 @@ export default function CityDetailPage({ params }: { params: Promise<{ id: strin
           >
             <ListChecks className="w-6 h-6 text-[#C8956C] mb-2" />
             <h3 className="font-bold text-[#4A6670] text-sm">行李清单</h3>
-            <p className="text-xs text-[#4A6670]/50 mt-0.5">{city.packingList.length}项必备</p>
+            <p className="text-xs text-[#4A6670]/50 mt-0.5">
+              {city.packingList.length}项必备
+            </p>
           </button>
           <button
             onClick={() => setShowBudget(true)}
@@ -437,15 +672,22 @@ export default function CityDetailPage({ params }: { params: Promise<{ id: strin
                 : "bg-gradient-to-r from-[#C8956C] to-[#A67B5B] text-white"
             }`}
           >
-            <Heart className={`w-4 h-4 ${fav ? "fill-white" : ""}`} /> {fav ? "已收藏" : "收藏"}
+            <Heart className={`w-4 h-4 ${fav ? "fill-white" : ""}`} />{" "}
+            {fav ? "已收藏" : "收藏"}
           </button>
         </div>
       </div>
 
       {/* 行李清单弹窗 */}
       {showPacking && (
-        <div className="fixed inset-0 z-50 bg-black/40 flex items-end" onClick={() => setShowPacking(false)}>
-          <div className="bg-white rounded-t-2xl w-full max-h-[80vh] overflow-y-auto animate-slide-up" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="fixed inset-0 z-50 bg-black/40 flex items-end"
+          onClick={() => setShowPacking(false)}
+        >
+          <div
+            className="bg-white rounded-t-2xl w-full max-h-[80vh] overflow-y-auto animate-slide-up"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="sticky top-0 bg-white border-b border-[#C8956C]/10 p-4 flex items-center justify-between">
               <h3 className="font-bold text-[#4A6670]">行李清单</h3>
               <button onClick={() => setShowPacking(false)}>
@@ -454,18 +696,32 @@ export default function CityDetailPage({ params }: { params: Promise<{ id: strin
             </div>
             <div className="p-4">
               {Object.entries(packingCategoryLabels).map(([cat, catLabel]) => {
-                const items = city.packingList.filter((p) => p.category === cat);
+                const items = city.packingList.filter(
+                  (p) => p.category === cat,
+                );
                 if (items.length === 0) return null;
                 return (
                   <div key={cat} className="mb-4">
-                    <h4 className="text-xs font-semibold text-[#4A6670]/50 uppercase tracking-wider mb-2">{catLabel}</h4>
+                    <h4 className="text-xs font-semibold text-[#4A6670]/50 uppercase tracking-wider mb-2">
+                      {catLabel}
+                    </h4>
                     {items.map((item, i) => (
                       <div key={i} className="flex items-center gap-2 py-1.5">
-                        <div className={`w-5 h-5 rounded border ${item.required ? "bg-[#C8956C] border-[#C8956C]" : "border-[#4A6670]/20"} flex items-center justify-center`}>
-                          {item.required && <CheckCircle2 className="w-3 h-3 text-white" />}
+                        <div
+                          className={`w-5 h-5 rounded border ${item.required ? "bg-[#C8956C] border-[#C8956C]" : "border-[#4A6670]/20"} flex items-center justify-center`}
+                        >
+                          {item.required && (
+                            <CheckCircle2 className="w-3 h-3 text-white" />
+                          )}
                         </div>
-                        <span className="text-sm text-[#4A6670]">{item.name}</span>
-                        {!item.required && <span className="text-[10px] text-[#4A6670]/30">选带</span>}
+                        <span className="text-sm text-[#4A6670]">
+                          {item.name}
+                        </span>
+                        {!item.required && (
+                          <span className="text-[10px] text-[#4A6670]/30">
+                            选带
+                          </span>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -478,8 +734,14 @@ export default function CityDetailPage({ params }: { params: Promise<{ id: strin
 
       {/* 预算速算弹窗 */}
       {showBudget && (
-        <div className="fixed inset-0 z-50 bg-black/40 flex items-end" onClick={() => setShowBudget(false)}>
-          <div className="bg-white rounded-t-2xl w-full animate-slide-up" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="fixed inset-0 z-50 bg-black/40 flex items-end"
+          onClick={() => setShowBudget(false)}
+        >
+          <div
+            className="bg-white rounded-t-2xl w-full animate-slide-up"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="border-b border-[#C8956C]/10 p-4 flex items-center justify-between">
               <h3 className="font-bold text-[#4A6670]">预算速算</h3>
               <button onClick={() => setShowBudget(false)}>
@@ -488,22 +750,48 @@ export default function CityDetailPage({ params }: { params: Promise<{ id: strin
             </div>
             <div className="p-4 space-y-4">
               <div>
-                <label className="text-xs text-[#4A6670]/50 mb-1 block">出行人数</label>
+                <label className="text-xs text-[#4A6670]/50 mb-1 block">
+                  出行人数
+                </label>
                 <div className="flex items-center gap-3">
-                  <button onClick={() => setBudgetPeople(Math.max(1, budgetPeople - 1))} className="w-8 h-8 rounded-full bg-[#F5EDE4] flex items-center justify-center text-[#C8956C]">-</button>
-                  <span className="text-lg font-bold text-[#4A6670]">{budgetPeople}人</span>
-                  <button onClick={() => setBudgetPeople(budgetPeople + 1)} className="w-8 h-8 rounded-full bg-[#F5EDE4] flex items-center justify-center text-[#C8956C]">+</button>
+                  <button
+                    onClick={() =>
+                      setBudgetPeople(Math.max(1, budgetPeople - 1))
+                    }
+                    className="w-8 h-8 rounded-full bg-[#F5EDE4] flex items-center justify-center text-[#C8956C]"
+                  >
+                    -
+                  </button>
+                  <span className="text-lg font-bold text-[#4A6670]">
+                    {budgetPeople}人
+                  </span>
+                  <button
+                    onClick={() => setBudgetPeople(budgetPeople + 1)}
+                    className="w-8 h-8 rounded-full bg-[#F5EDE4] flex items-center justify-center text-[#C8956C]"
+                  >
+                    +
+                  </button>
                 </div>
               </div>
               <div>
-                <label className="text-xs text-[#4A6670]/50 mb-1 block">住宿档位</label>
+                <label className="text-xs text-[#4A6670]/50 mb-1 block">
+                  住宿档位
+                </label>
                 <div className="flex gap-2">
-                  {([["budget", "经济型"], ["comfort", "舒适型"], ["luxury", "高端型"]] as const).map(([key, label]) => (
+                  {(
+                    [
+                      ["budget", "经济型"],
+                      ["comfort", "舒适型"],
+                      ["luxury", "高端型"],
+                    ] as const
+                  ).map(([key, label]) => (
                     <button
                       key={key}
                       onClick={() => setBudgetHotelLevel(key)}
                       className={`flex-1 py-2 rounded-lg text-xs font-medium ${
-                        budgetHotelLevel === key ? "bg-[#C8956C] text-white" : "bg-[#F5EDE4] text-[#4A6670]"
+                        budgetHotelLevel === key
+                          ? "bg-[#C8956C] text-white"
+                          : "bg-[#F5EDE4] text-[#4A6670]"
                       }`}
                     >
                       {label}
@@ -512,11 +800,28 @@ export default function CityDetailPage({ params }: { params: Promise<{ id: strin
                 </div>
               </div>
               <div className="bg-[#FAF7F2] rounded-xl p-4">
-                <p className="text-xs text-[#4A6670]/50 mb-1">预计总预算（{budget.days}天）</p>
-                <p className="text-2xl font-bold text-[#C8956C]">¥{budget.low.toLocaleString()} - ¥{budget.high.toLocaleString()}</p>
+                <p className="text-xs text-[#4A6670]/50 mb-1">
+                  预计总预算（{budget.days}天）
+                </p>
+                <p className="text-2xl font-bold text-[#C8956C]">
+                  ¥{budget.low.toLocaleString()} - ¥
+                  {budget.high.toLocaleString()}
+                </p>
                 <div className="mt-2 space-y-1 text-xs text-[#4A6670]/60">
-                  <p>住宿：约¥{budgetHotelLevel === "budget" ? "150" : budgetHotelLevel === "comfort" ? "350" : "700"}/晚</p>
-                  <p>交通+餐饮+门票：约¥{Math.round(budget.low * 0.5 / budgetPeople)}-{Math.round(budget.high * 0.5 / budgetPeople)}/人</p>
+                  <p>
+                    住宿：约¥
+                    {budgetHotelLevel === "budget"
+                      ? "150"
+                      : budgetHotelLevel === "comfort"
+                        ? "350"
+                        : "700"}
+                    /晚
+                  </p>
+                  <p>
+                    交通+餐饮+门票：约¥
+                    {Math.round((budget.low * 0.5) / budgetPeople)}-
+                    {Math.round((budget.high * 0.5) / budgetPeople)}/人
+                  </p>
                 </div>
               </div>
             </div>
@@ -526,8 +831,14 @@ export default function CityDetailPage({ params }: { params: Promise<{ id: strin
 
       {/* 收藏到清单弹窗 */}
       {showAddToList && (
-        <div className="fixed inset-0 z-50 bg-black/40 flex items-end" onClick={() => setShowAddToList(false)}>
-          <div className="bg-white rounded-t-2xl w-full max-h-[60vh] overflow-y-auto animate-slide-up" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="fixed inset-0 z-50 bg-black/40 flex items-end"
+          onClick={() => setShowAddToList(false)}
+        >
+          <div
+            className="bg-white rounded-t-2xl w-full max-h-[60vh] overflow-y-auto animate-slide-up"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="border-b border-[#C8956C]/10 p-4 flex items-center justify-between">
               <h3 className="font-bold text-[#4A6670]">收藏到清单</h3>
               <button onClick={() => setShowAddToList(false)}>
@@ -549,11 +860,19 @@ export default function CityDetailPage({ params }: { params: Promise<{ id: strin
                   className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-[#FAF7F2] transition-colors"
                 >
                   <div className="w-8 h-8 rounded-lg bg-[#F5EDE4] flex items-center justify-center">
-                    <Heart className={`w-4 h-4 ${list.cityIds.includes(city.id) ? "text-[#E8655A] fill-[#E8655A]" : "text-[#C8956C]"}`} />
+                    <Heart
+                      className={`w-4 h-4 ${list.cityIds.includes(city.id) ? "text-[#E8655A] fill-[#E8655A]" : "text-[#C8956C]"}`}
+                    />
                   </div>
-                  <span className="text-sm font-medium text-[#4A6670] flex-1">{list.name}</span>
-                  <span className="text-xs text-[#4A6670]/40">{list.cityIds.length}个</span>
-                  {list.cityIds.includes(city.id) && <CheckCircle2 className="w-4 h-4 text-[#C8956C]" />}
+                  <span className="text-sm font-medium text-[#4A6670] flex-1">
+                    {list.name}
+                  </span>
+                  <span className="text-xs text-[#4A6670]/40">
+                    {list.cityIds.length}个
+                  </span>
+                  {list.cityIds.includes(city.id) && (
+                    <CheckCircle2 className="w-4 h-4 text-[#C8956C]" />
+                  )}
                 </button>
               ))}
               <button
@@ -568,7 +887,9 @@ export default function CityDetailPage({ params }: { params: Promise<{ id: strin
                 <div className="w-8 h-8 rounded-lg bg-[#C8956C]/10 flex items-center justify-center">
                   <Plus className="w-4 h-4 text-[#C8956C]" />
                 </div>
-                <span className="text-sm font-medium text-[#C8956C]">新建清单</span>
+                <span className="text-sm font-medium text-[#C8956C]">
+                  新建清单
+                </span>
               </button>
             </div>
           </div>
@@ -600,16 +921,25 @@ function FunTab({ city }: { city: CityGuide }) {
         if (spots.length === 0) return null;
         return (
           <div key={group}>
-            <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium mb-2 ${priorityLabels[group].color}`}>
+            <span
+              className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium mb-2 ${priorityLabels[group].color}`}
+            >
               {priorityLabels[group].label}
             </span>
             <div className="space-y-2">
               {spots.map((spot, i) => (
-                <div key={i} className="bg-white rounded-xl border border-[#C8956C]/10 p-3">
+                <div
+                  key={i}
+                  className="bg-white rounded-xl border border-[#C8956C]/10 p-3"
+                >
                   <div className="flex items-start justify-between">
                     <div>
-                      <h4 className="font-bold text-[#4A6670] text-sm">{spot.name}</h4>
-                      <p className="text-xs text-[#4A6670]/50">{spot.tagline}</p>
+                      <h4 className="font-bold text-[#4A6670] text-sm">
+                        {spot.name}
+                      </h4>
+                      <p className="text-xs text-[#4A6670]/50">
+                        {spot.tagline}
+                      </p>
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-1.5 mt-2">
@@ -631,7 +961,8 @@ function FunTab({ city }: { city: CityGuide }) {
                   </div>
                   {spot.tips && (
                     <p className="text-xs text-[#C8956C] mt-2 flex items-start gap-1">
-                      <Lightbulb className="w-3 h-3 shrink-0 mt-0.5" /> {spot.tips}
+                      <Lightbulb className="w-3 h-3 shrink-0 mt-0.5" />{" "}
+                      {spot.tips}
                     </p>
                   )}
                 </div>
@@ -649,18 +980,28 @@ function FoodTab({ city }: { city: CityGuide }) {
   return (
     <div className="space-y-4">
       <div>
-        <h3 className="text-xs font-semibold text-[#4A6670]/50 uppercase tracking-wider mb-2">必吃特色</h3>
+        <h3 className="text-xs font-semibold text-[#4A6670]/50 uppercase tracking-wider mb-2">
+          必吃特色
+        </h3>
         <div className="space-y-2">
           {city.food.map((item, i) => (
-            <div key={i} className="bg-white rounded-xl border border-[#C8956C]/10 p-3">
+            <div
+              key={i}
+              className="bg-white rounded-xl border border-[#C8956C]/10 p-3"
+            >
               <div className="flex items-start justify-between">
-                <h4 className="font-bold text-[#4A6670] text-sm">{item.name}</h4>
-                <span className="text-xs text-[#C8956C]">{item.pricePerPerson}</span>
+                <h4 className="font-bold text-[#4A6670] text-sm">
+                  {item.name}
+                </h4>
+                <span className="text-xs text-[#C8956C]">
+                  {item.pricePerPerson}
+                </span>
               </div>
               <p className="text-xs text-[#4A6670]/60 mt-1">{item.howToEat}</p>
               {item.pitfall && (
                 <p className="text-xs text-amber-600 mt-1 flex items-start gap-1">
-                  <AlertTriangle className="w-3 h-3 shrink-0 mt-0.5" /> {item.pitfall}
+                  <AlertTriangle className="w-3 h-3 shrink-0 mt-0.5" />{" "}
+                  {item.pitfall}
                 </p>
               )}
             </div>
@@ -669,16 +1010,29 @@ function FoodTab({ city }: { city: CityGuide }) {
       </div>
       {city.foodAreas && city.foodAreas.length > 0 && (
         <div>
-          <h3 className="text-xs font-semibold text-[#4A6670]/50 uppercase tracking-wider mb-2">本地人美食街区</h3>
+          <h3 className="text-xs font-semibold text-[#4A6670]/50 uppercase tracking-wider mb-2">
+            本地人美食街区
+          </h3>
           <div className="space-y-2">
             {city.foodAreas.map((area, i) => (
-              <div key={i} className="bg-white rounded-xl border border-[#C8956C]/10 p-3">
+              <div
+                key={i}
+                className="bg-white rounded-xl border border-[#C8956C]/10 p-3"
+              >
                 <div className="flex items-start justify-between">
-                  <h4 className="font-bold text-[#4A6670] text-sm">{area.name}</h4>
-                  <span className="text-[10px] text-[#4A6670]/40">{area.bestTime}</span>
+                  <h4 className="font-bold text-[#4A6670] text-sm">
+                    {area.name}
+                  </h4>
+                  <span className="text-[10px] text-[#4A6670]/40">
+                    {area.bestTime}
+                  </span>
                 </div>
-                <p className="text-xs text-[#4A6670]/40 mt-0.5">{area.location}</p>
-                <p className="text-xs text-[#4A6670]/60 mt-1">{area.direction}</p>
+                <p className="text-xs text-[#4A6670]/40 mt-0.5">
+                  {area.location}
+                </p>
+                <p className="text-xs text-[#4A6670]/60 mt-1">
+                  {area.direction}
+                </p>
               </div>
             ))}
           </div>
@@ -705,12 +1059,21 @@ function ShopTab({ city }: { city: CityGuide }) {
           </h3>
           <div className="space-y-2">
             {items.map((item, i) => (
-              <div key={i} className="bg-white rounded-xl border border-[#C8956C]/10 p-3">
+              <div
+                key={i}
+                className="bg-white rounded-xl border border-[#C8956C]/10 p-3"
+              >
                 <div className="flex items-start justify-between">
-                  <h4 className="font-bold text-[#4A6670] text-sm">{item.name}</h4>
-                  <span className="text-[10px] text-[#4A6670]/40">{item.forWho}</span>
+                  <h4 className="font-bold text-[#4A6670] text-sm">
+                    {item.name}
+                  </h4>
+                  <span className="text-[10px] text-[#4A6670]/40">
+                    {item.forWho}
+                  </span>
                 </div>
-                <p className="text-xs text-[#4A6670]/60 mt-1">{item.highlight}</p>
+                <p className="text-xs text-[#4A6670]/60 mt-1">
+                  {item.highlight}
+                </p>
                 {item.duration && (
                   <span className="flex items-center gap-1 text-[10px] text-[#4A6670]/40 mt-1">
                     <Clock className="w-3 h-3" /> {item.duration}
@@ -739,13 +1102,20 @@ function PitfallTab({ city }: { city: CityGuide }) {
         const meta = pitfallCategoryLabels[cat];
         return (
           <div key={cat}>
-            <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium mb-2 border ${meta?.color || "bg-gray-50 text-gray-600"}`}>
+            <div
+              className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium mb-2 border ${meta?.color || "bg-gray-50 text-gray-600"}`}
+            >
               {meta?.icon} {meta?.label || cat}
             </div>
             <div className="space-y-2">
               {items.map((item, i) => (
-                <div key={i} className="bg-white rounded-xl border border-[#C8956C]/10 p-3">
-                  <p className="text-sm text-[#4A6670] leading-relaxed">{item.content}</p>
+                <div
+                  key={i}
+                  className="bg-white rounded-xl border border-[#C8956C]/10 p-3"
+                >
+                  <p className="text-sm text-[#4A6670] leading-relaxed">
+                    {item.content}
+                  </p>
                 </div>
               ))}
             </div>
@@ -757,12 +1127,20 @@ function PitfallTab({ city }: { city: CityGuide }) {
 }
 
 /** 行程视图 */
-function ItineraryView({ city, mode }: { city: CityGuide; mode: "easy" | "intense" }) {
+function ItineraryView({
+  city,
+  mode,
+}: {
+  city: CityGuide;
+  mode: "easy" | "intense";
+}) {
   const days = city.itinerary[mode];
   if (!days || days.length === 0) {
     return (
       <div className="bg-white rounded-xl border border-[#C8956C]/10 p-4 text-center">
-        <p className="text-sm text-[#4A6670]/40">暂无{mode === "easy" ? "轻松版" : "暴走版"}行程</p>
+        <p className="text-sm text-[#4A6670]/40">
+          暂无{mode === "easy" ? "轻松版" : "暴走版"}行程
+        </p>
       </div>
     );
   }
@@ -770,9 +1148,14 @@ function ItineraryView({ city, mode }: { city: CityGuide; mode: "easy" | "intens
   return (
     <div className="space-y-3">
       {days.map((day, i) => (
-        <div key={i} className="bg-white rounded-xl border border-[#C8956C]/10 overflow-hidden">
+        <div
+          key={i}
+          className="bg-white rounded-xl border border-[#C8956C]/10 overflow-hidden"
+        >
           <div className="bg-[#F5EDE4] px-3 py-2 flex items-center justify-between">
-            <span className="font-bold text-[#C8956C] text-sm">{day.label}</span>
+            <span className="font-bold text-[#C8956C] text-sm">
+              {day.label}
+            </span>
             <span className="text-[10px] text-[#4A6670]/40 flex items-center gap-1">
               <Users className="w-3 h-3" /> {day.walkLevel}
             </span>
@@ -786,11 +1169,15 @@ function ItineraryView({ city, mode }: { city: CityGuide; mode: "easy" | "intens
               if (items.length === 0) return null;
               return (
                 <div key={label} className="flex items-start gap-2">
-                  <span className="text-[10px] text-[#4A6670]/40 w-8 shrink-0 pt-0.5">{label}</span>
+                  <span className="text-[10px] text-[#4A6670]/40 w-8 shrink-0 pt-0.5">
+                    {label}
+                  </span>
                   <div className="flex-1">
                     {items.map((item, j) => (
                       <span key={j} className="text-xs text-[#4A6670]">
-                        {j > 0 && <ChevronRight className="inline w-3 h-3 text-[#C8956C]/40 mx-0.5" />}
+                        {j > 0 && (
+                          <ChevronRight className="inline w-3 h-3 text-[#C8956C]/40 mx-0.5" />
+                        )}
                         {item}
                       </span>
                     ))}
@@ -799,8 +1186,14 @@ function ItineraryView({ city, mode }: { city: CityGuide; mode: "easy" | "intens
               );
             })}
             <div className="flex items-center gap-3 text-[10px] text-[#4A6670]/40 mt-1 pt-1 border-t border-[#C8956C]/5">
-              <span className="flex items-center gap-1"><Train className="w-3 h-3" /> {day.transport}</span>
-              {day.nearbyFood && <span className="flex items-center gap-1"><Utensils className="w-3 h-3" /> {day.nearbyFood}</span>}
+              <span className="flex items-center gap-1">
+                <Train className="w-3 h-3" /> {day.transport}
+              </span>
+              {day.nearbyFood && (
+                <span className="flex items-center gap-1">
+                  <Utensils className="w-3 h-3" /> {day.nearbyFood}
+                </span>
+              )}
             </div>
           </div>
         </div>
