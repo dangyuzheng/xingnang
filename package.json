@@ -11,7 +11,7 @@
     "lint:build": "eslint . --quiet",
     "ts-check": "tsc -p tsconfig.app.json",
     "validate": "pnpm run --parallel '/^(ts-check|lint:build)$/'",
-    "deploy": "gh-pages -d dist"
+    "deploy": "vite build && copy dist\\index.html dist\\404.html && gh-pages -d dist"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.958.0",
