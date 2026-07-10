@@ -11,7 +11,7 @@
     "lint:build": "eslint . --quiet",
     "ts-check": "tsc -p tsconfig.app.json",
     "validate": "pnpm run --parallel '/^(ts-check|lint:build)$/'",
-    "deploy": "vite build && copy dist\\index.html dist\\404.html && gh-pages -d dist"
+    "deploy": "vite build && copy public\\5c7866ff11fb8232b8601eb5601f5119.txt dist\\ && copy dist\\index.html dist\\404.html && gh-pages -d dist"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.12",
